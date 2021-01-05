@@ -33,8 +33,7 @@ steps:
         from_secret: docker_password
       dockerfile: Dockerfile
       repo: docker.io/mxudong/k8s-test-common-backend
-      mirror: https://pee6w651.mirror.aliyuncs.com
-      tags:
-        - ${DRONE_BUILD_NUMBER}
+      auto_tag: true
+      auto_tag_suffix: linux-amd64
     environment:
       PLUGIN_INSECURE: "true"
