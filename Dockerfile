@@ -5,3 +5,9 @@ FROM golang:1.15
 # - Author : A-Donga
 #
 # Verwion : build-0.0.1
+
+# Copy file
+COPY app app
+
+# Run program
+CMD ./app
