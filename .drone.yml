@@ -32,7 +32,7 @@ steps:
       password:
         from_secret: docker_password
       dockerfile: Dockerfile
-      repo: docker.io/mxudong/k8s-test-common-backend
+      repo: mxudong/k8s-test-common-backend
       auto_tag: true
       auto_tag_suffix: linux-amd64
     environment:
