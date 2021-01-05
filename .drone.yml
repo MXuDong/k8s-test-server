@@ -32,7 +32,6 @@ steps:
       password:
         from_secret: docker_password
       dockerfile: Dockerfile
-      registry: https://docker.io/
       repo: docker.io/mxudong/k8s-test-common-backend
       mirror: https://pee6w651.mirror.aliyuncs.com
       tags:
