@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"k8s-test-backend/internal/server"
 	"os"
 )
 
@@ -12,8 +13,9 @@ var BuildStamp = ""
 func main() {
 	if len(os.Args) > 1 {
 		fmt.Println(Version)
+	}else {
+		server.Start(":3000")
 	}
-	fmt.Println("Complete")
 }
 
 func showVersion() {
