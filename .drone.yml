@@ -20,20 +20,6 @@ steps:
     commands:
       - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o app cmd/main.go
       -
-  - name: build image
-    image: plugins/docker
-    pull: if-not-exists
-    volumes:
-      - name: docker-cache
-        path: /var/lib/docker
-    settings:
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      dockerfile: Dockerfile
-      repo: docker.io/mxudong/k8s-test-common-backend
-      auto_tag: true
-      auto_tag_suffix: linux-amd64
-    environment:
-      PLUGIN_INSECURE: "true"
+trigger:
+  branch:
+    - master
