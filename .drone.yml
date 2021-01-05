@@ -19,3 +19,23 @@ steps:
       GO111MODULE: on
     commands:
       - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o app cmd/main.go
+      -
+  - name: build image
+    image: plugins/docker
+    pull: if-not-exists
+    volumes:
+      - name: docker-cache
+        path: /var/lib/docker
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      dockerfile: Dockerfile
+      registry: https://hub.docker.com/
+      repo: mxudong/k8s-test-common-backend
+      mirror: https://pee6w651.mirror.aliyuncs.com
+      tags:
+        - ${DRONE_BUILD_NUMBER}
+    environment:
+      PLUGIN_INSECURE: "true"
