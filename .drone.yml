@@ -1,13 +1,17 @@
+# The drone config
 kind: pipeline
 type: kubernetes
 name: default
 
+# define the k8s name space
 metadata:
   namespace: drones
   labels:
     app: drones-test-app
 
+# config pipeline
 steps:
+  # The step 1: build application
   - name: build program
     image: golang:1.15
     volumes:
@@ -18,8 +22,8 @@ steps:
       GOPROXY: https://goproxy.io
       GO111MODULE: on
     commands:
-      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o app cmd/main.go
-      -
+      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.BuildStamp=`date -u '+%Y-%m-%d_%I:%M:%S%p' -X main.Version=0.0.1 -X main.BuildPlatform=Drone" -o app cmd/main.go
+
 trigger:
   branch:
     - master
