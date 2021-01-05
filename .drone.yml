@@ -2,6 +2,11 @@ kind: pipeline
 type: kubernetes
 name: default
 
+metadata:
+  namespace: drones
+  labels:
+    app: drones-test-app
+
 steps:
   - name: build program
     image: golang:1.15
