@@ -1,0 +1,16 @@
+kind: pipeline
+type: kubernetes
+name: default
+
+steps:
+  - name: build program
+    image: golang:1.15
+    volumes:
+      - name: go-cache
+        path: /go/pkg
+    environment:
+      GOCACHE: /go/pkg/.cache/go-build/edge-backend
+      GOPROXY: https://goproxy.io
+      GO111MODULE: on
+    commands:
+      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -o app cmd/main.go
