@@ -10,7 +10,9 @@ var Version = ""
 var BuildPlatform = ""
 var BuildStamp = ""
 
+// main will start application
 func main() {
+	// all the argument with application will output version info.
 	if len(os.Args) > 1 {
 		fmt.Println(Version)
 	}else {
@@ -18,6 +20,7 @@ func main() {
 	}
 }
 
+// showVersion will print version info
 func showVersion() {
 	fmt.Println("The version is :", Version)
 	fmt.Println("The build from :", BuildPlatform)
