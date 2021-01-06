@@ -1,0 +1,6 @@
+name: Build image info
+on: [push, pull_request]
+
+jobs:
+  build_application:
+    name: build application

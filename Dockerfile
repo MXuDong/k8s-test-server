@@ -7,7 +7,13 @@ FROM golang:1.15
 # Verwion : build-0.0.1
 
 # Copy file
-COPY app app
+WORKDIR /go/src/app
 
-# Run program
-CMD ./app
+COPY . .
+
+ENV GOPROXY https://goproxy.io
+
+RUN go get -d -v ./...
+RUN go build -o app cmd/main.go
+
+CMD ["./app"]
