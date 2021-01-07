@@ -30,6 +30,7 @@ spec:
       containers:
         - name: k8s-common-backend
           image: mxudong/common:latest
+          imagePullPolicy: Always
           env:
             - name: SERVICE_IP
               valueFrom:
