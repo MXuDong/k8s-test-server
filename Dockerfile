@@ -12,6 +12,9 @@ WORKDIR /go/src/app
 COPY . .
 
 ENV GOPROXY https://goproxy.io
+ENV SERVICE_IP in_docker
+ENV SERVICE_NAME in_docker
+ENV SERVICE_NAMESPACE in_docker
 
 RUN go get -d -v ./...
 RUN go build -o app cmd/main.go

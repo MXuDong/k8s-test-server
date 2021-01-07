@@ -12,6 +12,9 @@ var BuildStamp = ""
 
 // main will start application
 func main() {
+
+	//
+
 	// all the argument with application will output version info.
 	if len(os.Args) > 1 {
 		fmt.Println(Version)
