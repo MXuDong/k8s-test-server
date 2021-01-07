@@ -1,0 +1,48 @@
+# name space
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: xd-test
+
+---
+# deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-common-backend
+  namespace: xd-test
+  labels:
+    app: k8s-test
+    type: common-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-test
+      type: common-backend
+  template:
+    metadata:
+      namespace: xd-test
+      labels:
+        app: k8s-test
+        type: common-backend
+    spec:
+      containers:
+        - name: k8s-common-backend
+          image: mxudong/common:latest
+          ports:
+            - containerPort: 3000
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-common-backend
+  namespace: xd-test
+spec:
+  selector:
+    app: k8s-test
+    type: common-backend
+  ports:
+    - port: 3000
+      targetPort: 3000
