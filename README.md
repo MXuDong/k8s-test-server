@@ -14,6 +14,9 @@
 - SERVICE_NAME
 - SERVICE_NAMESPACE 
 
+### [GET]/env
+获取当前环境下所有的环境变量
+
 ## ENVs - 环境变量声明
 ### SERVICE_IP
 应用服务地址 
