@@ -15,4 +15,6 @@ require (
 	golang.org/x/sys v0.0.0-20210104204734-6f8348627aad // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
+	k8s.io/apimachinery v0.20.0
+	k8s.io/client-go v0.20.0
 )
