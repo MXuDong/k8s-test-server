@@ -5,6 +5,8 @@ import (
 	"os"
 )
 
+var OK = 200
+
 // Define the service info
 type PodEnvInfo struct {
 	ServiceIp        string `json:"service_ip"`
@@ -23,8 +25,10 @@ func Start(port string) {
 
 	r := gin.Default()
 	r.GET("/hello", HelloWord)
+	// envs
 	r.GET("/podenv", GetPodEnvInfo(e))
 	r.GET("/env", GetEnvInfo)
+	r.GET("/env/:env", GetEnv)
 
 	// run and listen
 	_ = r.Run(port)
@@ -33,24 +37,4 @@ func Start(port string) {
 // HelloWord is the func of Get
 func HelloWord(c *gin.Context) {
 	c.String(200, "hello world")
-}
-
-// GetEnvInfo will output some env info
-func GetPodEnvInfo(e *PodEnvInfo) func(c *gin.Context) {
-	return func(c *gin.Context) {
-		c.JSON(200, e)
-	}
-}
-
-type StringArrayResult struct {
-	Paths []string `json:"paths"`
-}
-
-// GetEnvInfo will return all the environment values
-func GetEnvInfo(c *gin.Context) {
-	envs := os.Environ()
-	res := &StringArrayResult{
-		Paths: envs,
-	}
-	c.JSON(200, res)
 }
