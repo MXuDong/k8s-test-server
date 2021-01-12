@@ -1,23 +1,34 @@
 # k8s测试服务-后端
 
-对k8s特性进行测试的服务后端
+对k8s特性进行测试的服务后端。
 
 ## 路由列表
 
-### [GET]/hello
-验证服务是否正常，返回字符串`hello world`
+#### [GET]/hello
+验证服务是否正常，返回字符串`hello world`。
 
-### [GET]/podenv
+#### [GET]/podenv
 获取容器部分环境变量
 
 - SERVICE_IP
 - SERVICE_NAME
 - SERVICE_NAMESPACE 
 
-### [GET]/env
-获取当前环境下所有的环境变量
+#### [GET]/env
+获取当前环境下所有的环境变量。
 
 ## ENVs - 环境变量声明
+### IS_IN_CLUSTER
+是否为kubernetes环境内，该环境变量将影响系统初始化`k8s-clientSet`的方式。
+
+可选项：
+- true: 集群内启动
+- false: 集群外启动
+
+如果不是true的任何选项，包括不设置均认为集群外启动，会尝试加载kubeConfig。
+系统将会从`home/.kube/config`进行查找，或者通过通过指定`kubeconfig`参数进行查找。
+
+    deocker环境内为 false
 ### SERVICE_IP
 应用服务地址 
 

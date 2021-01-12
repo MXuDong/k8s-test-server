@@ -15,6 +15,7 @@ ENV GOPROXY https://goproxy.io
 ENV SERVICE_IP in_docker
 ENV SERVICE_NAME in_docker
 ENV SERVICE_NAMESPACE in_docker
+ENV IS_IN_CLUSERT false
 
 RUN go get -d -v ./...
 RUN go build -o app cmd/main.go
