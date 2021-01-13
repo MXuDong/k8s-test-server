@@ -18,8 +18,20 @@
 获取当前环境下所有的环境变量。
 
 ## ENVs - 环境变量声明
+### USE_KUBE_FEATURE
+是否启用应用对Kube的使用，如果启用，应用将获取k8s集群信息。
+
+可选项：
+- true: 启用
+- false: 不启用
+
+如果不是true的任何选项，包括不设置均认为不启用对接k8s集群的功能。
+
+    docker环境内为 false
 ### IS_IN_CLUSTER
 是否为kubernetes环境内，该环境变量将影响系统初始化`k8s-clientSet`的方式。
+
+需要开启环境变量`USE_KUBE_FEATURE`才能正常使用该功能。
 
 可选项：
 - true: 集群内启动

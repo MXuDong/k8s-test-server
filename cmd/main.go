@@ -15,14 +15,25 @@ var BuildStamp = ""
 var IsInCluster = false
 var ClusterSet *kubernetes.Clientset = nil
 
+const (
+	EnvUseKubeFeature = "USE_KUBE_FEATURE"
+	UseKubeFeature    = "true"
+)
+
 // main will start application
 func main() {
-
+	showVersion()
 	// all the argument with application will output version info.
-	if len(os.Args) > 1 {
-		showVersion()
-	} else {
-		showVersion()
+	if len(os.Args) == 1 {
+		if ClusterSet == nil {
+			server.GlobalConfig.UseKubeFeature = false
+			server.GlobalConfig.IsInSideCluster = false
+			server.GlobalConfig.KubeClientSet = nil
+		} else {
+			server.GlobalConfig.UseKubeFeature = true
+			server.GlobalConfig.IsInSideCluster = IsInCluster
+			server.GlobalConfig.KubeClientSet = ClusterSet
+		}
 		server.Start(":3000")
 	}
 }
@@ -35,13 +46,19 @@ func showVersion() {
 }
 
 func init() {
-	client, isInCluster, err := client.InitClient()
-	if err != nil {
-		logrus.Error(err)
-		ClusterSet = nil
-		return
+	if os.Getenv(EnvUseKubeFeature) == UseKubeFeature {
+		logrus.Infoln("Use kube feature mode")
+		clientItem, isInCluster, err := client.InitClient()
+		if err != nil {
+			logrus.Error(err)
+			logrus.Infoln("Change mode to disable kube feature mode")
+			return
+		}
+		IsInCluster = isInCluster
+		ClusterSet = clientItem
+		logrus.Infoln("Init kubernetes cluster success, the mode is:(false : out side of cluster, true: in side of cluster) ", isInCluster)
+		server.GlobalConfig.UseKubeFeature = true
+	} else {
+		logrus.Infoln("Disable kube feature mode")
 	}
-	IsInCluster = isInCluster
-	ClusterSet = client
-	logrus.Infoln("Init kubernetes cluster success, the mode is:(false : out side of cluster, true: in side of cluster) ", isInCluster)
 }

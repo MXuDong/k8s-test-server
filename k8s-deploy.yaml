@@ -46,6 +46,8 @@ spec:
                   fieldPath: metadata.namespace
             - name: IS_IN_CLUSERT
               value: true
+            - name: USE_KUBE_FEATURE
+              value: true
           ports:
             - containerPort: 3000
 
