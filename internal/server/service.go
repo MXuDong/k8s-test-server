@@ -40,8 +40,8 @@ func Start(port string) {
 	r := gin.Default()
 	r.GET("/hello", HelloWord)
 	// envs
-	r.GET("/podenv", GetPodEnvInfo(e))
 	r.GET("/env", GetEnvInfo)
+	r.GET("/env-pod", GetPodEnvInfo(e))
 	r.GET("/env/:env", GetEnv)
 
 	// run and listen

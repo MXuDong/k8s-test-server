@@ -7,7 +7,7 @@
 #### [GET]/hello
 验证服务是否正常，返回字符串`hello world`。
 
-#### [GET]/podenv
+#### [GET]/env/pod
 获取容器部分环境变量
 
 - SERVICE_IP
