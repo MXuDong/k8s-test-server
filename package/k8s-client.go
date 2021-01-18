@@ -18,8 +18,6 @@ const (
 
 //InitClient will return kubectl client, the return is client set, is out side of cluster and init error
 func InitClient() (*kubernetes.Clientset, bool, error) {
-	// todo check is in or out side of cluster
-
 	isInCluster := IsInKubernetes()
 	if isInCluster {
 		clientSet, err := insideMode()
