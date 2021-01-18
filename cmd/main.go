@@ -61,4 +61,6 @@ func init() {
 	} else {
 		logrus.Infoln("Disable kube feature mode")
 	}
+
+	// init the log file
 }
