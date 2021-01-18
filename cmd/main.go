@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/sirupsen/logrus"
+	"io"
 	"k8s-test-backend/internal/server"
 	client "k8s-test-backend/package"
 	"k8s.io/client-go/kubernetes"
@@ -60,6 +61,19 @@ func init() {
 		server.GlobalConfig.UseKubeFeature = true
 	} else {
 		logrus.Infoln("Disable kube feature mode")
+	}
+
+	// What the mean of 0666?
+	file, err := os.OpenFile("log.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	writers := [] io.Writer{
+		file,
+		os.Stdout,
+	}
+	fileAndStdoutWriter := io.MultiWriter(writers...)
+	if err == nil{
+		logrus.SetOutput(fileAndStdoutWriter)
+	}else {
+		logrus.Infoln("fail to log to file")
 	}
 
 	// init the log file
