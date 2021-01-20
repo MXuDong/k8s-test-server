@@ -1,5 +1,5 @@
 package server
 
-func GetLogs()  {
-
+func GetLogs() {
+	// read log from disk
 }
