@@ -28,13 +28,13 @@ func main() {
 	// all the argument with application will output version info.
 	if len(os.Args) == 1 {
 		if ClusterSet == nil {
-			server.GlobalConfig.UseKubeFeature = false
-			server.GlobalConfig.IsInSideCluster = false
-			server.GlobalConfig.KubeClientSet = nil
+			server.Config.UseKubeFeature = false
+			server.Config.IsInSideCluster = false
+			server.Config.KubeClientSet = nil
 		} else {
-			server.GlobalConfig.UseKubeFeature = true
-			server.GlobalConfig.IsInSideCluster = IsInCluster
-			server.GlobalConfig.KubeClientSet = ClusterSet
+			server.Config.UseKubeFeature = true
+			server.Config.IsInSideCluster = IsInCluster
+			server.Config.KubeClientSet = ClusterSet
 		}
 		server.Start(conf.ServicePort)
 	}
@@ -59,7 +59,7 @@ func init() {
 		IsInCluster = isInCluster
 		ClusterSet = clientItem
 		logrus.Infoln("Init kubernetes cluster success, the mode is:(false : out side of cluster, true: in side of cluster) ", isInCluster)
-		server.GlobalConfig.UseKubeFeature = true
+		server.Config.UseKubeFeature = true
 	} else {
 		logrus.Infoln("Disable kube feature mode")
 	}

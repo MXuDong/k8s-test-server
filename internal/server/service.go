@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"k8s.io/client-go/kubernetes"
 	"os"
 )
 
@@ -13,19 +12,6 @@ type PodEnvInfo struct {
 	ServiceIp        string `json:"service_ip"`
 	ServiceName      string `json:"service_name"`
 	ServiceNamespace string `json:"service_namespace"`
-}
-
-var GlobalConfig globalConfig = globalConfig{
-	UseKubeFeature:  false,
-	IsInSideCluster: false,
-	KubeClientSet:   nil,
-}
-
-// global config here
-type globalConfig struct {
-	UseKubeFeature  bool
-	IsInSideCluster bool
-	KubeClientSet   *kubernetes.Clientset
 }
 
 // Start will start net work
@@ -44,6 +30,12 @@ func Start(port string) {
 	r.GET("/env-pod", GetPodEnvInfo(e))
 	r.GET("/env/:env", GetEnv)
 
+	// switch on kube api trans if kube feature is enable
+	kubeGroup := r.Group("/kube-feature")
+	kubeGroup.GET("/base-info", KubeBaseInfo)
+	if Config.UseKubeFeature {
+
+	}
 	// run and listen
 	_ = r.Run(port)
 }
