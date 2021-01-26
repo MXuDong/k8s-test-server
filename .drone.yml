@@ -27,11 +27,6 @@ steps:
   - name: build docker image
     image: plugins/docker
     pull: if-not-exists
-    volumes:
-      - name: docker-cache
-        path: /var/lib/docker
-      - name: docker-sock
-        path: /var/run/docker.sock
     settings:
       username:
         from_secret: docker_username
