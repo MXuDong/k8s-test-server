@@ -14,6 +14,6 @@ type globalConfig struct {
 	IsInSideCluster bool
 	KubeClientSet   *kubernetes.Clientset
 
-	logPath  string
-	logLevel string
+	LogPath  string
+	LogLevel string
 }

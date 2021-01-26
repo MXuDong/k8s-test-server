@@ -29,12 +29,14 @@ func Start(port string) {
 	r.GET("/env", GetEnvInfo)
 	r.GET("/env-pod", GetPodEnvInfo(e))
 	r.GET("/env/:env", GetEnv)
+	// logs
+	r.GET("/log", GetLogs)
 
 	// switch on kube api trans if kube feature is enable
 	kubeGroup := r.Group("/kube-feature")
 	kubeGroup.GET("/base-info", KubeBaseInfo)
 	if Config.UseKubeFeature {
-
+		// kube feature route here
 	}
 	// run and listen
 	_ = r.Run(port)

@@ -48,6 +48,9 @@ func showVersion() {
 }
 
 func init() {
+
+	server.Config.LogPath = conf.LogFilePath
+
 	if os.Getenv(EnvUseKubeFeature) == UseKubeFeature {
 		logrus.Infoln("Use kube feature mode")
 		clientItem, isInCluster, err := client.InitClient()
@@ -65,7 +68,7 @@ func init() {
 	}
 
 	// What the mean of 0666?
-	file, err := os.OpenFile(conf.LogFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile(server.Config.LogPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	writers := []io.Writer{
 		file,
 		os.Stdout,
