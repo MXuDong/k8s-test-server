@@ -45,13 +45,3 @@ steps:
 trigger:
   branch:
     - master
-volumes:
-  - name: docker-cache
-    host:
-      path: /daocloud/drone/cache/mesh/dsm/docker
-  - name: docker-sock
-    host:
-      path: /var/run/docker.sock
-  - name: go-cache
-    host:
-      path: /root/cache/go
