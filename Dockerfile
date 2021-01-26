@@ -1,4 +1,4 @@
-FROM 47.100.40.30/library/golang:1.15
+FROM golang:1.15
 
 # Author info：
 # - [ I don't like use MAINTAINER to define the Author ]
