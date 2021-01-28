@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"github.com/sirupsen/logrus"
 	"io"
 	"k8s-test-backend/conf"
@@ -24,19 +25,28 @@ const (
 
 // main will start application
 func main() {
-	showVersion()
-	// all the argument with application will output version info.
-	if len(os.Args) == 1 {
-		if ClusterSet == nil {
-			server.Config.UseKubeFeature = false
-			server.Config.IsInSideCluster = false
-			server.Config.KubeClientSet = nil
-		} else {
-			server.Config.UseKubeFeature = true
-			server.Config.IsInSideCluster = IsInCluster
-			server.Config.KubeClientSet = ClusterSet
+
+	// set params
+	flag.StringVar(&server.Config.LogPath, "logPath", "log.log", "The log file path.")
+	showVersionFlag := flag.Bool("v", false, "Show version info, if true, it will not start server.")
+	flag.Parse()
+
+	if *showVersionFlag {
+		showVersion()
+	} else {
+		// all the argument with application will output version info.
+		if len(os.Args) == 1 {
+			if ClusterSet == nil {
+				server.Config.UseKubeFeature = false
+				server.Config.IsInSideCluster = false
+				server.Config.KubeClientSet = nil
+			} else {
+				server.Config.UseKubeFeature = true
+				server.Config.IsInSideCluster = IsInCluster
+				server.Config.KubeClientSet = ClusterSet
+			}
+			server.Start(conf.ServicePort)
 		}
-		server.Start(conf.ServicePort)
 	}
 }
 
