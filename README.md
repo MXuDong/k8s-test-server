@@ -17,6 +17,20 @@
 #### [GET]/env
 获取当前环境下所有的环境变量。
 
+## Params - 应用启动参数说明
+```
+-ginMode string
+    The mode of gin. (default "debug")
+    
+-kubeconfig string
+    (optional) absolute path to the kubeconfig file (default "/Users/mengxudong/.kube/config")
+    
+-logPath string
+    The log file path. (default "log.log")
+    
+-v    Show version info, if true, it will not start server.
+```
+
 ## ENVs - 环境变量声明
 ### USE_KUBE_FEATURE
 是否启用应用对Kube的使用，如果启用，应用将获取k8s集群信息。

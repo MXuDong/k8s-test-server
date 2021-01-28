@@ -2,13 +2,16 @@ package main
 
 import (
 	"flag"
+	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"io"
 	"k8s-test-backend/conf"
 	"k8s-test-backend/internal/server"
 	client "k8s-test-backend/package"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/util/homedir"
 	"os"
+	"path/filepath"
 )
 
 var Version = ""
@@ -28,8 +31,17 @@ func main() {
 
 	// set params
 	flag.StringVar(&server.Config.LogPath, "logPath", "log.log", "The log file path.")
+	flag.StringVar(&server.Config.GinMode, "ginMode", gin.DebugMode, "The mode of gin.")
 	showVersionFlag := flag.Bool("v", false, "Show version info, if true, it will not start server.")
+
+	if home := homedir.HomeDir(); home != "" {
+		server.Config.KubeConfig = *flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+	} else {
+		server.Config.KubeConfig = *flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
+	}
 	flag.Parse()
+
+	initFunc()
 
 	if *showVersionFlag {
 		showVersion()
@@ -57,10 +69,9 @@ func showVersion() {
 	logrus.Infoln("The build stamp:", BuildStamp)
 }
 
-func init() {
+func initFunc() {
 
-	server.Config.LogPath = conf.LogFilePath
-
+	// init kube if can use kube feature
 	if os.Getenv(EnvUseKubeFeature) == UseKubeFeature {
 		logrus.Infoln("Use kube feature mode")
 		clientItem, isInCluster, err := client.InitClient()
@@ -91,5 +102,4 @@ func init() {
 	}
 
 	// init the log file
-
 }

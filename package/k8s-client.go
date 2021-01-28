@@ -1,13 +1,11 @@
 package client
 
 import (
-	"flag"
+	"k8s-test-backend/internal/server"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/client-go/util/homedir"
 	"os"
-	"path/filepath"
 )
 
 const (
@@ -35,17 +33,8 @@ func IsInKubernetes() bool {
 
 //outsideMode will init kubernetes client out side of cluster
 func outsideMode() (*kubernetes.Clientset, error) {
-	var kubeConfig *string
 
-	if home := homedir.HomeDir(); home != "" {
-		kubeConfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
-	} else {
-		kubeConfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
-	}
-
-	flag.Parse()
-
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeConfig)
+	config, err := clientcmd.BuildConfigFromFlags("", server.Config.KubeConfig)
 	if err != nil {
 		return nil, err
 	}

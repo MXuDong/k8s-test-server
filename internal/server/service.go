@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
+	"k8s-test-backend/internal/server/middleware"
 	"os"
 )
 
@@ -24,6 +25,11 @@ func Start(port string) {
 	}
 
 	r := gin.Default()
+	gin.SetMode(Config.GinMode)
+
+	// register mid
+	r.Use(middleware.LogHandler)
+
 	r.GET("/hello", HelloWord)
 	// envs
 	r.GET("/env", GetEnvInfo)
