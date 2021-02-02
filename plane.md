@@ -6,3 +6,4 @@
 - [ ] To show all resources in kubernetes.
 - [ ] Use volume
 - [ ] Support Istio feature
+- [ ] Add make file
