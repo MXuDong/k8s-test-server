@@ -1,0 +1,31 @@
+FROM golang:1.15
+
+ARG ARCH
+ARG OS
+
+ENV GO111MODULE=on
+ENV CGO_ENABLED=0
+ENV GOOS=${OS}
+ENV GOARCH=${ARCH}
+
+# project envs
+ENV GOPROXY https://goproxy.io
+
+
+WORKDIR /go/cache
+WORKDIR /app
+
+ADD go.mod .
+
+# the application envs
+ENV SERVICE_IP in_docker
+ENV SERVICE_NAME in_docker
+ENV SERVICE_NAMESPACE in_docker
+ENV IS_IN_CLUSERT false
+ENV USE_KUBE_FEATURE false
+
+RUN go mod download
+
+ADD . .
+
+RUN go build -ldflags "-s -w" -o ./dist/app ./cmd/main.go

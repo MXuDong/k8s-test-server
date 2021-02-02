@@ -73,7 +73,23 @@ k8s环境内命名空间
 [k8s-deploy.yaml](k8s-deploy.yaml)
 
 ## 编译
+### 源码直接编译
 ```
 $ go get -d -v ./...
 $ go build -o app cmd/main.go
+```
+
+### Makefile编译镜像
+```
+$  sh LocalBuild.sh
+```
+
+### Makefile 编译为本地执行包
+```
+$ make build
+```
+
+### Docker 直接打包镜像
+```
+$ docker build -t A-Donga/k8s-common-test:0.0.1 .
 ```
