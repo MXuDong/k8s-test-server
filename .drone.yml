@@ -8,19 +8,6 @@ metadata:
   namespace: drones
   labels:
     app: drones-test-app
-  spec:
-    volumes:
-      - go-cache:
-          Type: HostPath
-          Path: /daocloud/drone/cache/go-cache
-      - docker-cache:
-          Type: HostPath
-          Path: /daocloud/drone/cache/docker-cache
-      - dockersock:
-          Type: HostPath
-          Path: /var/run/docker.sock
-          HostPathType: Socket
-
 
 # config pipeline
 steps:
@@ -45,7 +32,7 @@ steps:
       - name: docker-cache
         path: /var/lib/docker
       - name: dockersock
-        path: /var/run/docker.sock
+        path: /var/run
     settings:
       username:
         from_secret: docker_username
@@ -59,15 +46,14 @@ steps:
 trigger:
   branch:
     - master
-#
-#volumes:
-#  - name: go-cache
-#    host:
-#      path: /daocloud/drone/cache/go-cache
-#  - name: docker-cache
-#    host:
-#      path: /daocloud/drone/cache/docker-cache
-#  - name: dockersock
-#    host:
-#      path: /var/run/docker.sock
-#    type: Socket
+
+volumes:
+  - name: go-cache
+    host:
+      path: /daocloud/drone/cache/go-cache
+  - name: docker-cache
+    host:
+      path: /daocloud/drone/cache/docker-cache
+  - name: dockersock
+    host:
+      path: /var/run
