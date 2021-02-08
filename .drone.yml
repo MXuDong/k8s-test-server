@@ -57,4 +57,4 @@ volumes:
   - name: dockersock
     host:
       path: /var/run/docker.sock
-      type: Socket
+    type: Socket
