@@ -24,6 +24,27 @@ steps:
     commands:
       - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=0.0.1 -X main.BuildPlatform=Drone" -o app cmd/main.go
       - ./app -v
+trigger:
+  branch:
+    - master
+
+volumes:
+  - name: go-cache
+    host:
+      path: /daocloud/drone/cache/go-cache
+  - name: docker-cache
+    host:
+      path: /daocloud/drone/cache/docker-cache
+
+---
+# For docker runner to build docker image
+
+# The drone config
+kind: pipeline
+type: docker
+name: default
+
+steps:
   # The step 2: build docker image
   - name: build docker image
     image: plugins/docker
@@ -43,6 +64,7 @@ steps:
       registry: 47.100.40.30
       tags:
         ${DRONE_BUILD_NUMBER}
+
 trigger:
   branch:
     - master
