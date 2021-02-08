@@ -59,15 +59,15 @@ steps:
 trigger:
   branch:
     - master
-
-volumes:
-  - name: go-cache
-    host:
-      path: /daocloud/drone/cache/go-cache
-  - name: docker-cache
-    host:
-      path: /daocloud/drone/cache/docker-cache
-  - name: dockersock
-    host:
-      path: /var/run/docker.sock
-    type: Socket
+#
+#volumes:
+#  - name: go-cache
+#    host:
+#      path: /daocloud/drone/cache/go-cache
+#  - name: docker-cache
+#    host:
+#      path: /daocloud/drone/cache/docker-cache
+#  - name: dockersock
+#    host:
+#      path: /var/run/docker.sock
+#    type: Socket
