@@ -42,7 +42,7 @@ volumes:
 # The drone config
 kind: pipeline
 type: docker
-name: default
+name: build images
 
 steps:
   # The step 2: build docker image
