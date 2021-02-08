@@ -8,6 +8,19 @@ metadata:
   namespace: drones
   labels:
     app: drones-test-app
+  spec:
+    volumes:
+      - go-cache:
+          Type: HostPath
+          Path: /daocloud/drone/cache/go-cache
+      - docker-cache:
+          Type: HostPath
+          Path: /daocloud/drone/cache/docker-cache
+      - dockersock:
+          Type: HostPath
+          Path: /var/run/docker.sock
+          HostPathType: Socket
+
 
 # config pipeline
 steps:
