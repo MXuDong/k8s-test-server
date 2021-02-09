@@ -46,7 +46,7 @@ name: build images
 
 steps:
   # The step 2: build docker image
-  - name: build docker image
+  - name: for harbor - private
     image: plugins/docker
     pull: if-not-exists
     volumes:
@@ -62,6 +62,25 @@ steps:
       dockerfile: Dockerfile
       repo: 47.100.40.30/k8s-common/common-test
       registry: 47.100.40.30
+      tags:
+        drone-build-${DRONE_BUILD_NUMBER}
+
+  - name: for harbor - dao cloud
+    image: plugins/docker
+    pull: if-not-exists
+    volumes:
+      - name: docker-cache
+        path: /var/lib/docker
+      - name: dockersock
+        path: /var/run/docker.sock
+    settings:
+      username:
+        from_secret: daocloud_harbor_name
+      password:
+        from_secret: daocloud_harbor_secret
+      dockerfile: Dockerfile
+      repo: harbor.daocloud.cn/xudong.meng/common-test
+      registry: harbor.daocloud.cn
       tags:
         drone-build-${DRONE_BUILD_NUMBER}
 
