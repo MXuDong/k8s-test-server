@@ -2,21 +2,6 @@
 
 对k8s特性进行测试的服务后端。
 
-## 路由列表
-
-#### [GET]/hello
-验证服务是否正常，返回字符串`hello world`。
-
-#### [GET]/env/pod
-获取容器部分环境变量
-
-- SERVICE_IP
-- SERVICE_NAME
-- SERVICE_NAMESPACE 
-
-#### [GET]/env
-获取当前环境下所有的环境变量。
-
 ## Params - 应用启动参数说明
 ```
 -ginMode string

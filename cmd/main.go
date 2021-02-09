@@ -9,6 +9,7 @@ import (
 	"k8s-test-backend/internal/server"
 	client "k8s-test-backend/package"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/util/homedir"
 	"os"
 	"path/filepath"
@@ -20,6 +21,7 @@ var BuildStamp = ""
 
 var IsInCluster = false
 var ClusterSet *kubernetes.Clientset = nil
+var KubeConfig *rest.Config
 
 const (
 	EnvUseKubeFeature = "USE_KUBE_FEATURE"
@@ -35,9 +37,9 @@ func main() {
 	showVersionFlag := flag.Bool("v", false, "Show version info, if true, it will not start server.")
 
 	if home := homedir.HomeDir(); home != "" {
-		server.Config.KubeConfig = *flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+		server.Config.KubeConfigPath = *flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
 	} else {
-		server.Config.KubeConfig = *flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
+		server.Config.KubeConfigPath = *flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 	}
 	flag.Parse()
 
@@ -52,10 +54,12 @@ func main() {
 				server.Config.UseKubeFeature = false
 				server.Config.IsInSideCluster = false
 				server.Config.KubeClientSet = nil
+				server.Config.KubeConfig = nil
 			} else {
 				server.Config.UseKubeFeature = true
 				server.Config.IsInSideCluster = IsInCluster
 				server.Config.KubeClientSet = ClusterSet
+				server.Config.KubeConfig = KubeConfig
 			}
 			server.Start(conf.ServicePort)
 		}
@@ -74,16 +78,17 @@ func initFunc() {
 	// init kube if can use kube feature
 	if os.Getenv(EnvUseKubeFeature) == UseKubeFeature {
 		logrus.Infoln("Use kube feature mode")
-		clientItem, isInCluster, err := client.InitClient()
+		clientItem, config, isInCluster, err := client.InitClient()
 		if err != nil {
 			logrus.Error(err)
 			logrus.Infoln("Change mode to disable kube feature mode")
-			return
+		} else {
+			IsInCluster = isInCluster
+			ClusterSet = clientItem
+			KubeConfig = config
+			logrus.Infoln("Init kubernetes cluster success, the mode is:(false : out side of cluster, true: in side of cluster) ", isInCluster)
+			server.Config.UseKubeFeature = true
 		}
-		IsInCluster = isInCluster
-		ClusterSet = clientItem
-		logrus.Infoln("Init kubernetes cluster success, the mode is:(false : out side of cluster, true: in side of cluster) ", isInCluster)
-		server.Config.UseKubeFeature = true
 	} else {
 		logrus.Infoln("Disable kube feature mode")
 	}
@@ -100,6 +105,4 @@ func initFunc() {
 	} else {
 		logrus.Infoln("fail to log to file")
 	}
-
-	// init the log file
 }

@@ -15,14 +15,14 @@ const (
 )
 
 //InitClient will return kubectl client, the return is client set, is out side of cluster and init error
-func InitClient() (*kubernetes.Clientset, bool, error) {
+func InitClient() (*kubernetes.Clientset, *rest.Config, bool, error) {
 	isInCluster := IsInKubernetes()
 	if isInCluster {
-		clientSet, err := insideMode()
-		return clientSet, isInCluster, err
+		clientSet, config, err := insideMode()
+		return clientSet, config, isInCluster, err
 	} else {
-		clientSet, err := outsideMode()
-		return clientSet, isInCluster, err
+		clientSet, config, err := outsideMode()
+		return clientSet, config, isInCluster, err
 	}
 }
 
@@ -32,32 +32,32 @@ func IsInKubernetes() bool {
 }
 
 //outsideMode will init kubernetes client out side of cluster
-func outsideMode() (*kubernetes.Clientset, error) {
+func outsideMode() (*kubernetes.Clientset, *rest.Config, error) {
 
-	config, err := clientcmd.BuildConfigFromFlags("", server.Config.KubeConfig)
+	config, err := clientcmd.BuildConfigFromFlags("", server.Config.KubeConfigPath)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	clientSet, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return clientSet, nil
+	return clientSet, config, nil
 }
 
 // insideMode will init kubernetes client in side of cluster
-func insideMode() (*kubernetes.Clientset, error) {
+func insideMode() (*kubernetes.Clientset, *rest.Config, error) {
 	config, err := rest.InClusterConfig()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	clientSet, err := kubernetes.NewForConfig(config)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return clientSet, nil
+	return clientSet, config, nil
 }
