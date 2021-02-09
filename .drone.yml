@@ -29,7 +29,7 @@ steps:
     image: golang:1.15
     volumes:
       - name: go-cache
-          path: /go/pkg
+        path: /go/pkg
     environment:
       GOCACHE: /go/pkg/.cache/go-build/edge-backend
       GOPROXY: https://goproxy.io
