@@ -24,9 +24,6 @@ steps:
     commands:
       - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=0.0.1 -X main.BuildPlatform=Drone" -o app cmd/main.go
       - ./app -v
-trigger:
-  branch:
-    - master
 
 volumes:
   - name: go-cache
