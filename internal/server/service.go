@@ -43,7 +43,6 @@ func Start(port string) {
 	kubeGroup.GET("/base-info", KubeBaseInfo)
 	if Config.UseKubeFeature {
 		// kube feature route here
-		kubeGroup.GET("/resource/:resource/namespace/:namespace", GetKubeResource)
 	}
 
 	// add base info
