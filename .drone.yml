@@ -24,6 +24,9 @@ steps:
     commands:
       - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=0.0.1 -X main.BuildPlatform=Drone" -o app cmd/main.go
       - ./app -v
+trigger:
+  branch:
+    - master
 
 volumes:
   - name: go-cache
@@ -42,7 +45,7 @@ type: docker
 name: build images
 
 steps:
-  # The step build docker image
+  # The step 2: build docker image
   - name: build docker image
     image: plugins/docker
     pull: if-not-exists
@@ -61,25 +64,6 @@ steps:
       registry: 47.100.40.30
       tags:
         drone-build-${DRONE_BUILD_NUMBER}
-
-  - name: build docker image2
-      image: plugins/docker
-      pull: if-not-exists
-      volumes:
-        - name: docker-cache
-          path: /var/lib/docker
-        - name: dockersock
-          path: /var/run/docker.sock
-      settings:
-        username:
-          from_secret: daocloud_harbor_name
-        password:
-          from_secret: daocloud_harbor_secret
-        dockerfile: Dockerfile
-        repo: harbor.daocloud.cn/k8s-common/common-test
-        registry: harbor.daocloud.cn
-        tags:
-          drone-build-${DRONE_BUILD_NUMBER}
 
 trigger:
   branch:
