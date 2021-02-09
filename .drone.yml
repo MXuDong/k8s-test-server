@@ -63,7 +63,7 @@ steps:
       repo: 47.100.40.30/k8s-common/common-test
       registry: 47.100.40.30
       tags:
-        ${DRONE_BUILD_NUMBER}
+        drone-build-${DRONE_BUILD_NUMBER}
 
 trigger:
   branch:
