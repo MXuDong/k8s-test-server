@@ -30,11 +30,11 @@ func Start(port string) {
 	// register mid
 	r.Use(middleware.LogHandler)
 
-	r.GET("/hello", HelloWord)
 	// envs
 	r.GET("/env", GetEnvInfo)
 	r.GET("/env-pod", GetPodEnvInfo(e))
 	r.GET("/env/:env", GetEnv)
+
 	// logs
 	r.GET("/log", GetLogs)
 
@@ -45,6 +45,12 @@ func Start(port string) {
 		// kube feature route here
 		kubeGroup.GET("/resource/:resource/namespace/:namespace", GetKubeResource)
 	}
+
+	// add base info
+	r.GET("/hello", HelloWord)
+	r.GET("/routes", Index(r.Routes()))
+	r.GET("/", Index(r.Routes()))
+
 	// run and listen
 	_ = r.Run(port)
 }
@@ -52,4 +58,24 @@ func Start(port string) {
 // HelloWord is the func of Get
 func HelloWord(c *gin.Context) {
 	c.String(200, "hello world")
+}
+
+// Index will return routes
+func Index(info []gin.RouteInfo) func(ctx *gin.Context) {
+	type showInfo struct {
+		Method  string
+		Path    string
+		Handler string
+	}
+	var res []showInfo
+	for _, item := range info {
+		res = append(res, showInfo{
+			Method:  item.Method,
+			Path:    item.Path,
+			Handler: item.Handler,
+		})
+	}
+	return func(ctx *gin.Context) {
+		ctx.JSON(200, res)
+	}
 }
