@@ -35,7 +35,7 @@ steps:
       GOPROXY: https://goproxy.io
       GO111MODULE: on
     commands:
-      - go test
+      - go test cmd/main.go
 
 trigger:
   branch:
