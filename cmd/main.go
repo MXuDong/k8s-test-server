@@ -32,10 +32,10 @@ const (
 func main() {
 
 	// set params
-	flag.StringVar(&server.Config.LogPath, "logPath", "log.log", "The log file path.")
+	flag.StringVar(&server.Config.LogPath, "logPath", conf.LogFilePath, "The log file path.")
 	flag.StringVar(&server.Config.GinMode, "ginMode", gin.DebugMode, "The mode of gin.")
+	flag.StringVar(&server.Config.ApplicationPort, "port", conf.ServicePort, "The port of application.")
 	showVersionFlag := flag.Bool("v", false, "Show version info, if true, it will not start server.")
-
 	if home := homedir.HomeDir(); home != "" {
 		server.Config.KubeConfigPath = *flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
 	} else {
@@ -61,7 +61,7 @@ func main() {
 				server.Config.KubeClientSet = ClusterSet
 				server.Config.KubeConfig = KubeConfig
 			}
-			server.Start(conf.ServicePort)
+			server.Start()
 		}
 	}
 }

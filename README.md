@@ -12,6 +12,9 @@
     
 -logPath string
     The log file path. (default "log.log")
+
+-port string
+    The port of application. (default ":3000")
     
 -v    Show version info, if true, it will not start server.
 ```

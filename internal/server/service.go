@@ -16,7 +16,7 @@ type PodEnvInfo struct {
 }
 
 // Start will start net work
-func Start(port string) {
+func Start() {
 
 	e := &PodEnvInfo{
 		ServiceIp:        os.Getenv("SERVICE_IP"),
@@ -35,6 +35,12 @@ func Start(port string) {
 	r.GET("/env-pod", GetPodEnvInfo(e))
 	r.GET("/env/:env", GetEnv)
 
+	// common handler about stander restFul request method
+	commonGroup := r.Group("/common")
+	{
+		commonGroup.GET("/resources")
+	}
+
 	// logs
 	r.GET("/log", GetLogs)
 
@@ -51,7 +57,7 @@ func Start(port string) {
 	r.GET("/", Index(r.Routes()))
 
 	// run and listen
-	_ = r.Run(port)
+	_ = r.Run(Config.ApplicationPort)
 }
 
 // HelloWord is the func of Get

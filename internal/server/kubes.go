@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
 func KubeBaseInfo(ctx *gin.Context) {
@@ -13,12 +12,16 @@ func KubeBaseInfo(ctx *gin.Context) {
 	}
 }
 
-func GetKubeResource(ctx *gin.Context) {
-
-	kubeConfig := *(Config.KubeConfig)
-	kubeConfig.APIPath = ""
-	kubeConfig.GroupVersion = &schema.GroupVersion{
-		Group:   "",
-		Version: "",
-	}
-}
+// todo dynamic model for kubernetes resource
+//func GetKubeResource(ctx *gin.Context) {
+//
+//	version := ctx.Param("version")
+//	group := ctx.Param("group")
+//
+//	kubeConfig := *(Config.KubeConfig)
+//	kubeConfig.APIPath = ""
+//	kubeConfig.GroupVersion = &schema.GroupVersion{
+//		Group:   version,
+//		Version: group,
+//	}
+//}
