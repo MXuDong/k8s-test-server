@@ -8,7 +8,7 @@ WORKDIR /go/src/app
 
 COPY . .
 
-ENV GOPROXY https://goproxy.io
+ENV GOPROXY https://goproxy.cn
 # the application envs
 ENV SERVICE_IP in_docker
 ENV SERVICE_NAME in_docker
