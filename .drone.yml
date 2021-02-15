@@ -22,7 +22,7 @@ steps:
       GOPROXY: https://goproxy.io
       GO111MODULE: on
     commands:
-      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=0.0.1 -X main.BuildPlatform=Drone" -o app cmd/main.go
+      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${DRONE_BUILD_NUMBER} -X main.BuildPlatform=Drone" -o app cmd/main.go
       - ./app -v
 
   - name: test application
