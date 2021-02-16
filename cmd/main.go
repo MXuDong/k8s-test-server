@@ -78,7 +78,7 @@ func initFunc() {
 	// init kube if can use kube feature
 	if os.Getenv(EnvUseKubeFeature) == UseKubeFeature {
 		logrus.Infoln("Use kube feature mode")
-		clientItem, config, isInCluster, err := client.InitClient()
+		clientItem, config, isInCluster, err := client.InitClient(server.Config.KubeConfigPath)
 		if err != nil {
 			logrus.Error(err)
 			logrus.Infoln("Change mode to disable kube feature mode")

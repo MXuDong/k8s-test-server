@@ -38,7 +38,14 @@ func Start() {
 	// common handler about stander restFul request method
 	commonGroup := r.Group("/common")
 	{
-		commonGroup.GET("/resources")
+		// only test for once
+		commonGroup.GET("/resources", CommonGet)
+		commonGroup.POST("/resources", CommonPost)
+		commonGroup.DELETE("/resources", CommonDelete)
+
+		// test for cache
+		commonGroup.GET("/resources-cache/key/:key/value/:value", CacheGet)
+		commonGroup.POST("/resources-cache/", CachePost)
 	}
 
 	// logs

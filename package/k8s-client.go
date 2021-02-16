@@ -1,7 +1,6 @@
 package client
 
 import (
-	"k8s-test-backend/internal/server"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -15,13 +14,13 @@ const (
 )
 
 //InitClient will return kubectl client, the return is client set, is out side of cluster and init error
-func InitClient() (*kubernetes.Clientset, *rest.Config, bool, error) {
+func InitClient(configPath string) (*kubernetes.Clientset, *rest.Config, bool, error) {
 	isInCluster := IsInKubernetes()
 	if isInCluster {
 		clientSet, config, err := insideMode()
 		return clientSet, config, isInCluster, err
 	} else {
-		clientSet, config, err := outsideMode()
+		clientSet, config, err := outsideMode(configPath)
 		return clientSet, config, isInCluster, err
 	}
 }
@@ -32,9 +31,9 @@ func IsInKubernetes() bool {
 }
 
 //outsideMode will init kubernetes client out side of cluster
-func outsideMode() (*kubernetes.Clientset, *rest.Config, error) {
+func outsideMode(configPath string) (*kubernetes.Clientset, *rest.Config, error) {
 
-	config, err := clientcmd.BuildConfigFromFlags("", server.Config.KubeConfigPath)
+	config, err := clientcmd.BuildConfigFromFlags("", configPath)
 	if err != nil {
 		return nil, nil, err
 	}
