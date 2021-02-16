@@ -41,6 +41,18 @@ func CommonDelete(ctx *gin.Context) {
 	ctx.JSON(204, nil)
 }
 
+// CommonPut will set now time to response body
+func CommonPut(ctx *gin.Context) {
+	logrus.Infof("Common Put request %s", time.Now())
+	ctx.JSON(200, time.Now())
+}
+
+// CommonPatch will set now time to response body
+func CommonPatch(ctx *gin.Context) {
+	logrus.Infof("Common Patch request %s", time.Now())
+	ctx.JSON(200, time.Now())
+}
+
 // ========================================================= cache about
 
 var cacheClient = client.InitCacheClient()

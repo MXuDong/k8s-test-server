@@ -41,6 +41,8 @@ func Start() {
 		// only test for once
 		commonGroup.GET("/resources", CommonGet)
 		commonGroup.POST("/resources", CommonPost)
+		commonGroup.PUT("/resources", CommonPut)
+		commonGroup.PATCH("/resources", CommonPatch)
 		commonGroup.DELETE("/resources", CommonDelete)
 
 		// test for cache
