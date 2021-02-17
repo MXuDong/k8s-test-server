@@ -127,6 +127,12 @@ func CachePut(ctx *gin.Context) {
 	ctx.JSON(200, jsonObject)
 }
 
+func CacheClean(ctx *gin.Context) {
+	cacheClient.Clean()
+	logrus.Infof("Cache clean on [%s]", time.Now())
+	ctx.JSON(204, nil)
+}
+
 // CachePatch will update field which input set, if some field not set, will keep value.
 func CachePatch(ctx *gin.Context) {
 	k := ctx.Param("key")

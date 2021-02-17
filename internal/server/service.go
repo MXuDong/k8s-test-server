@@ -51,6 +51,7 @@ func Start() {
 		commonGroup.POST("/resources-cache/", CachePost)
 		commonGroup.PUT("/resources-cache/key/:key/value/:value", CachePut)
 		commonGroup.DELETE("/resources-cache/key/:key/value/:value", CacheDelete)
+		commonGroup.DELETE("/resources-cache/", CacheClean)
 		commonGroup.PATCH("/resources-cache/key/:key/value/:value", CachePatch)
 	}
 
