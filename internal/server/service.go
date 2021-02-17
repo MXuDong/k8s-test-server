@@ -63,6 +63,10 @@ func Start() {
 	kubeGroup.GET("/base-info", KubeBaseInfo)
 	if Config.UseKubeFeature {
 		// kube feature route here
+
+		//================= namespace
+		namespaceGroup := kubeGroup.Group("/namespace")
+		namespaceGroup.GET("/", ListNamespace)
 	}
 
 	// add base info
