@@ -1,6 +1,7 @@
 package client
 
 import (
+	"k8s-test-backend/conf"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
@@ -14,15 +15,25 @@ const (
 )
 
 //InitClient will return kubectl client, the return is client set, is out side of cluster and init error
-func InitClient(configPath string) (*kubernetes.Clientset, *rest.Config, bool, error) {
-	isInCluster := IsInKubernetes()
-	if isInCluster {
+func InitClient() error {
+	configPath := conf.ApplicationConfig.KubernetesConfigPath
+	if conf.ApplicationConfig.IsInCluster {
 		clientSet, config, err := insideMode()
-		return clientSet, config, isInCluster, err
+		if err != nil {
+			return err
+		}
+		conf.ApplicationConfig.KubeClientSet = clientSet
+		conf.ApplicationConfig.KubeClientConf = config
 	} else {
 		clientSet, config, err := outsideMode(configPath)
-		return clientSet, config, isInCluster, err
+		if err != nil {
+			return err
+		}
+		conf.ApplicationConfig.KubeClientSet = clientSet
+		conf.ApplicationConfig.KubeClientConf = config
 	}
+
+	return nil
 }
 
 // IsInKubernetes will return the application is run in kubernetes, it get value from env : EnvIsInCluster

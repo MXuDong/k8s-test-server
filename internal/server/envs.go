@@ -2,14 +2,29 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
+	"k8s-test-backend/conf"
 	"os"
 )
 
+// Define the service info
+type podEnvInfo struct {
+	ServiceIp        string `json:"service_ip"`
+	ServiceName      string `json:"service_name"`
+	ServiceNamespace string `json:"service_namespace"`
+}
+
+var podEnvInfoInstance *podEnvInfo = nil
+
 // GetEnvInfo will output some env info
-func GetPodEnvInfo(e *PodEnvInfo) func(c *gin.Context) {
-	return func(c *gin.Context) {
-		c.JSON(OK, e)
+func PodEnv(c *gin.Context) {
+	if podEnvInfoInstance == nil {
+		podEnvInfoInstance = &podEnvInfo{
+			ServiceIp:        conf.ApplicationConfig.ServiceIp,
+			ServiceName:      conf.ApplicationConfig.ServiceName,
+			ServiceNamespace: conf.ApplicationConfig.ServiceNamespace,
+		}
 	}
+	c.JSON(OK, podEnvInfoInstance)
 }
 
 type StringArrayResult struct {

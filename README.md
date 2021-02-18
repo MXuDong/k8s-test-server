@@ -4,45 +4,29 @@
 
 ## Params - 应用启动参数说明
 ```
--ginMode string
-    The mode of gin. (default "debug")
-    
--kubeconfig string
-    (optional) absolute path to the kubeconfig file (default "/Users/mengxudong/.kube/config")
-    
--logPath string
-    The log file path. (default "log.log")
+      --config_path string              the application run config file path
+      --enable_cache_http               whether use cache http handle, default is true (default true)
+      --enable_common_http              whether use common http handle, default is true (default true)
+      --enable_kubernetes_feature       whether enable kubernetes feature, default is false
+  -h, --help                            help for k8s-test-server
+      --is_in_kubernetes                whether the application in kubernetes cluster as the pods
+      --kubernetes_config_path string   the config path of kubernetes (default "/Users/mengxudong/.kube/config")
+      --log_path string                 the file of log output (default "log.log")
+      --mode string                     the application run mode, in 'debug', 'release', 'test' (default "debug")
+      --port string                     the application start port, default is :3000 (default ":3000")
+  -v, --version                         show the version of application
 
--port string
-    The port of application. (default ":3000")
-    
--v    Show version info, if true, it will not start server.
 ```
 
+## 配置文件
+支持 yaml、toml、json等主流配置文件类型
+
+[示例文件 k8s-test-server-config.yaml](k8s-test-server-config.yaml)
+
 ## ENVs - 环境变量声明
-### USE_KUBE_FEATURE
-是否启用应用对Kube的使用，如果启用，应用将获取k8s集群信息。
 
-可选项：
-- true: 启用
-- false: 不启用
+所有参数均可以转换为环境变量，大写后，前缀为`KTS_`
 
-如果不是true的任何选项，包括不设置均认为不启用对接k8s集群的功能。
-
-    docker环境内为 false
-### IS_IN_CLUSTER
-是否为kubernetes环境内，该环境变量将影响系统初始化`k8s-clientSet`的方式。
-
-需要开启环境变量`USE_KUBE_FEATURE`才能正常使用该功能。
-
-可选项：
-- true: 集群内启动
-- false: 集群外启动
-
-如果不是true的任何选项，包括不设置均认为集群外启动，会尝试加载kubeConfig。
-系统将会从`home/.kube/config`进行查找，或者通过通过指定`kubeconfig`参数进行查找。
-
-    deocker环境内为 false
 ### SERVICE_IP
 应用服务地址 
 
@@ -58,7 +42,7 @@ k8s环境内命名空间
     
 ## k8s 编排文件
 
-[k8s-deploy.yaml](k8s-deploy.yaml)
+[示例文件 k8s-deploy.yaml](k8s-deploy.yaml)
 
 ## 编译
 ### 源码直接编译

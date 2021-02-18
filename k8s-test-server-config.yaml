@@ -1,0 +1,6 @@
+server:
+  port: ":8081"
+  mode: "debug"
+common:
+  enable_common_http: false
+  enable_cache_http: false

@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
-	client "k8s-test-backend/package"
+	client2 "k8s-test-backend/pkg/client"
 	"time"
 )
 
@@ -55,7 +55,7 @@ func CommonPatch(ctx *gin.Context) {
 
 // ========================================================= cache about
 
-var cacheClient = client.InitCacheClient()
+var cacheClient = client2.InitCacheClient()
 
 // CachePost will create value of input, and the input must a json object
 func CachePost(ctx *gin.Context) {

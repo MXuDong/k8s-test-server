@@ -2,10 +2,11 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
+	"k8s-test-backend/conf"
 )
 
 func KubeBaseInfo(ctx *gin.Context) {
-	if Config.UseKubeFeature {
+	if conf.ApplicationConfig.UseKubernetesFeature {
 		ctx.String(200, "Kube can use")
 	} else {
 		ctx.String(200, "Kube can't use now")
