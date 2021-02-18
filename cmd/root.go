@@ -58,7 +58,7 @@ All of the flags can set to ENV, and prefix is "KTS_"
 
 			// init logrus
 			// What the mean of 0666?
-			file, err := os.OpenFile(server.Config.LogPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+			file, err := os.OpenFile(conf.ApplicationConfig.LogPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 			writers := []io.Writer{
 				file,
 				os.Stdout,
