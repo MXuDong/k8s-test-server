@@ -6,11 +6,6 @@ import (
 )
 
 const (
-	LogFilePath = "log.log" // log file path
-	ServicePort = ":3000"   // server port
-
-	// ============================================================== update to new
-
 	ApplicationName = "k8s-test-server" // the application name.
 	version         = "0.0.1"           // the application version.
 
