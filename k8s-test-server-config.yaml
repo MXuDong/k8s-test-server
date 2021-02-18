@@ -1,6 +1,11 @@
 server:
-  port: ":8081"
+  port: ":3000"
   mode: "debug"
+  log_path: "log.log"
 common:
-  enable_common_http: false
-  enable_cache_http: false
+  enable_common_http: true
+  enable_cache_http: true
+k8s:
+  enable_kubernetes:_featur: false
+  is_in_kubernetes: false
+  kubernetes_config_path: ""
