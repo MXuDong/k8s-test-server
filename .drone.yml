@@ -22,20 +22,8 @@ steps:
       GOPROXY: https://goproxy.io
       GO111MODULE: on
     commands:
-      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${DRONE_BUILD_NUMBER} -X main.BuildPlatform=Drone" -o app cmd/main.go
+      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${DRONE_BUILD_NUMBER} -X main.BuildPlatform=Drone" -o app k8s-test-backend/cmd
       - ./app -v
-
-  - name: test application
-    image: golang:1.15
-    volumes:
-      - name: go-cache
-        path: /go/pkg
-    environment:
-      GOCACHE: /go/pkg/.cache/go-build/edge-backend
-      GOPROXY: https://goproxy.io
-      GO111MODULE: on
-    commands:
-      - go test cmd/main.go
 
 trigger:
   branch:
