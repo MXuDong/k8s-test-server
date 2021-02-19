@@ -46,7 +46,20 @@ type: docker
 name: build images
 
 steps:
-  # The step 2: build docker image
+    # build the application to ./dist/app
+  - name: build app
+    image: golang:1.15
+    volumes:
+      - name: go-cache
+        path: /go/pkg
+    environment:
+      GOCACHE: /go/pkg/.cache/go-build/edge-backend
+      GOPROXY: https://goproxy.io
+      GO111MODULE: on
+    commands:
+      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${DRONE_BUILD_NUMBER} -X main.BuildPlatform=Drone" -o ./dist/app k8s-test-backend/cmd
+
+  # for private harbor
   - name: for harbor - private
     image: plugins/docker
     pull: if-not-exists
@@ -60,12 +73,15 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_secret
-      dockerfile: Dockerfile
-      repo: 47.100.40.30/k8s-common/common-test
-      registry: 47.100.40.30
+      dockerfile: Dockerfile.drone
+      repo:
+        from_secret: private_harbor_project_name
+      registry:
+        from_secret: private_harbor_host
       tags:
         drone-build-${DRONE_BUILD_NUMBER}
 
+  # for daocloud harbor
   - name: for harbor - dao cloud
     image: plugins/docker
     pull: if-not-exists
@@ -79,7 +95,7 @@ steps:
         from_secret: daocloud_harbor_name
       password:
         from_secret: daocloud_harbor_secret
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.drone
       repo: harbor.daocloud.cn/xudong.meng/common-test
       registry: harbor.daocloud.cn
       tags:

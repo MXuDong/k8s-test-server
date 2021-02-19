@@ -1,0 +1,16 @@
+# docker for drone
+FROM golang:1.15
+
+# Author
+MAINTAINER Project:k8s-feature-test MXuDong <2941884109@qq.com>
+
+# Copy file
+WORKDIR /app
+
+COPY ./dist/app app
+
+# the application envs
+ENV KTS_USE_KUBE_FEATURE false
+ENV KTS_IS_IN_CLUSTER false
+
+CMD ["./app"]

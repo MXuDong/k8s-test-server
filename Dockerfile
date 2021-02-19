@@ -13,7 +13,7 @@ ENV GOPROXY https://goproxy.cn
 ENV KTS_ENV_SERVICE_IP in_docker
 ENV KTS_ENV_SERVICE_NAME in_docker
 ENV KTS_ENV_SERVICE_NAMESPACE in_docker
-ENV KTS_IS_IN_CLUSERT false
+ENV KTS_IS_IN_CLUSTER false
 ENV KTS_USE_KUBE_FEATURE false
 
 RUN go get -d -v ./...

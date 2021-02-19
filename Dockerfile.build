@@ -1,5 +1,7 @@
 FROM golang:1.15
 
+MAINTAINER Project:k8s-feature-test MXuDong <2941884109@qq.com>
+
 ARG ARCH
 ARG OS
 
@@ -21,7 +23,7 @@ ADD go.mod .
 ENV KTS_ENV_SERVICE_IP in_docker
 ENV KTS_ENV_SERVICE_NAME in_docker
 ENV KTS_ENV_SERVICE_NAMESPACE in_docker
-ENV KTS_IS_IN_CLUSERT false
+ENV KTS_IS_IN_CLUSTER false
 ENV KTS_USE_KUBE_FEATURE false
 
 RUN go mod download
