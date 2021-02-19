@@ -15,8 +15,8 @@ common:
 # The kubernetes params
 k8s:
   # If is true, application will try to load kubernetes config, if can't load, it value will set to false, and application will start too.
-  enable_kubernetes:_featur: false
+  enable_kubernetes_feature: false
   # If is true, the application will see as a pod in the kubernetes.
   is_in_kubernetes: false
-  # The config path of kubernetes, if is empty, application will auto search config with $HOME and /ete/.kube/config.yaml
-  kubernetes_config_path: ""
+  # The config path of kubernetes, if not use, remove it for auto search kubernetes config file.
+  kubernetes_config_path: "$home/.kube/conf"

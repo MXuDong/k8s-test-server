@@ -12,7 +12,7 @@ const (
 	// paths
 
 	// config-file
-	DefaultConfigFile = "k8s-test-server-config.yaml" // default config name is `k8s-test-server.yaml`, and search it in config path.
+	DefaultConfigFile = "temp.yaml" // default config name is `k8s-test-server.yaml`, and search it in config path.
 
 	// envs
 	EnvPreFix = "KTS" // the environment's name, short of k8s-test-server

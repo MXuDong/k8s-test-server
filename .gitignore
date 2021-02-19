@@ -2,4 +2,8 @@
 .idea/
 *.iml
 
+# application create
 *.log
+
+# temp file
+conf/temp.yaml
