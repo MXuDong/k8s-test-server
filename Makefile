@@ -20,7 +20,7 @@ endif
 
 
 build: pre-file
-	go build -o ${OUTPUT_FILE}/app cmd/main.go
+	go build -o ${OUTPUT_FILE}/app k8s-test-backend/cmd
 
 .PHONY: local-image
 local-image:
