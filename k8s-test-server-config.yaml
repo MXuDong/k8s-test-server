@@ -1,11 +1,22 @@
+# The server params.
 server:
+  # The port of application listen, default is 3000.
   port: ":3000"
+  # The application mode, choose one of [debug, release, test].
   mode: "debug"
+  # The log file path of application, if the file not exist, it will create, else, will append log to log file.
   log_path: "log.log"
+# The common params.
 common:
+  # If is true, will load common http handle, the request path follow RESTFul. And all the common http handle will response simple value.
   enable_common_http: true
+  # If is true, will load cache http handle, cache handle will cache request value, and all the request path follow RESTFul.
   enable_cache_http: true
+# The kubernetes params
 k8s:
+  # If is true, application will try to load kubernetes config, if can't load, it value will set to false, and application will start too.
   enable_kubernetes:_featur: false
+  # If is true, the application will see as a pod in the kubernetes.
   is_in_kubernetes: false
+  # The config path of kubernetes, if is empty, application will auto search config with $HOME and /ete/.kube/config.yaml
   kubernetes_config_path: ""

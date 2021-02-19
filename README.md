@@ -25,17 +25,19 @@
 
 ## ENVs - 环境变量声明
 
-所有参数均可以转换为环境变量，大写后，前缀为`KTS_`
+所有参数均可以转换为环境变量，大写后，前缀为`KTS_`，具体参数参配置文件即可
 
-### SERVICE_IP
+参数优先级：控制台启动指令>环境变量>配置文件>默认启动参数
+
+### KTS_ENV_SERVICE_IP
 应用服务地址 
 
     docker环境内为 in-docker
-### SERVICE_NAME
+### KTS_ENV_SERVICE_NAME
 应用服务名称
 
     docker环境内为 in-docker 
-### SERVICE_NAMESPACE
+### KTS_ENV_SERVICE_NAMESPACE
 k8s环境内命名空间
 
     docker环境内为 in-docker
