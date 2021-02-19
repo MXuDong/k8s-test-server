@@ -41,7 +41,6 @@ func Start() {
 			commonGroup.DELETE("/resources-cache/", CacheClean)
 			commonGroup.PATCH("/resources-cache/key/:key/value/:value", CachePatch)
 		}
-
 	}
 
 	// logs
@@ -58,6 +57,7 @@ func Start() {
 		//================= namespace
 		namespaceGroup := kubeGroup.Group("/namespace")
 		namespaceGroup.GET("/", ListNamespace)
+		namespaceGroup.GET("/:name", GetNamespace)
 	}
 
 	// add base info

@@ -21,3 +21,15 @@ func ListNamespace(ctx *gin.Context) {
 
 	ctx.JSON(200, result)
 }
+
+func GetNamespace(ctx *gin.Context) {
+	name := ctx.Param("name")
+	client := conf.ApplicationConfig.KubeClientSet
+	res, err := client.CoreV1().Namespaces().Get(ctx, name, v1.GetOptions{})
+	if err != nil {
+		ctx.JSON(400, err)
+		return
+	}
+	ctx.JSON(200, res)
+
+}
