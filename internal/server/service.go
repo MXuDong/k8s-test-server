@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"k8s-test-backend/conf"
+	"k8s-test-backend/internal/server/k8s-feature"
 	"k8s-test-backend/internal/server/middleware"
 )
 
@@ -56,8 +57,13 @@ func Start() {
 
 		//================= namespace
 		namespaceGroup := kubeGroup.Group("/namespace")
-		namespaceGroup.GET("/", ListNamespace)
-		namespaceGroup.GET("/:name", GetNamespace)
+		namespaceGroup.GET("/", k8s_feature.ListNamespace)
+		namespaceGroup.GET("/:name", k8s_feature.GetNamespace)
+
+		//================= pod
+		podGroup := kubeGroup.Group("/pod")
+		podGroup.GET("/:namespace", k8s_feature.ListPodByNamespace)
+		podGroup.GET("/:namespace/:name", k8s_feature.GetPodByName)
 	}
 
 	// add base info

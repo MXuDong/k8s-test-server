@@ -1,4 +1,4 @@
-package server
+package k8s_feature
 
 import (
 	"github.com/gin-gonic/gin"
