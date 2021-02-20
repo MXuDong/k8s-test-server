@@ -57,7 +57,7 @@ steps:
       GOPROXY: https://goproxy.io
       GO111MODULE: on
     commands:
-      make drone-build
+      - make drone-build
 
   # for private harbor
   - name: for harbor - private

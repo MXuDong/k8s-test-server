@@ -46,4 +46,4 @@ platform ?= DRONE
 .PHONY: drone-build
 drone-build:
 	# do package with go build
-	- GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=v0.0.$(version) -X main.BuildPlatform=$(platform) -X main.BuildStamp=$(createTime)" -o ./dist/app k8s-test-backend/cmd
+	GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=v0.0.$(version) -X main.BuildPlatform=$(platform) -X main.BuildStamp=$(createTime)" -o ./dist/app k8s-test-backend/cmd
