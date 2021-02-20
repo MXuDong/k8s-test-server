@@ -170,6 +170,6 @@ func initConf() {
 
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err == nil {
-		logrus.Infof("Using config file:", viper.ConfigFileUsed())
+		logrus.Infof("Using config file: %s", viper.ConfigFileUsed())
 	}
 }

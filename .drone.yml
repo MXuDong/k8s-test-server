@@ -22,7 +22,7 @@ steps:
       GOPROXY: https://goproxy.io
       GO111MODULE: on
     commands:
-      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${DRONE_BUILD_NUMBER} -X main.BuildPlatform=Drone" -o app k8s-test-backend/cmd
+      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=v0.0.${DRONE_BUILD_NUMBER} -X main.BuildPlatform=Drone -X main.BuildStamp=${DRONE_BUILD_FINISHED}" -o app k8s-test-backend/cmd
       - ./app -v
 
 trigger:
@@ -46,7 +46,7 @@ type: docker
 name: build images
 
 steps:
-    # build the application to ./dist/app
+  # build the application to ./dist/app
   - name: build app
     image: golang:1.15
     volumes:
@@ -57,7 +57,7 @@ steps:
       GOPROXY: https://goproxy.io
       GO111MODULE: on
     commands:
-      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=${DRONE_BUILD_NUMBER} -X main.BuildPlatform=Drone" -o ./dist/app k8s-test-backend/cmd
+      - GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w -X main.Version=v0.0.${DRONE_BUILD_NUMBER} -X main.BuildPlatform=Drone -X main.BuildStamp=${DRONE_BUILD_FINISHED}" -o ./dist/app k8s-test-backend/cmd
 
   # for private harbor
   - name: for harbor - private
