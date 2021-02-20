@@ -14,4 +14,4 @@
 - [ ] add deployment handle
 
 # Bug list
-- in kubernetes cluster, can't auto load config of kubernetes
+- in kubernetes cluster, can't auto load config of kubernetes [2021-02-20 21:38:34][]
