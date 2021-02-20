@@ -60,6 +60,11 @@ func Start() {
 		namespaceGroup.GET("/", k8s_feature.ListNamespace)
 		namespaceGroup.GET("/:name", k8s_feature.GetNamespace)
 
+		//================= deployment
+		deploymentGroup := kubeGroup.Group("/deployment")
+		deploymentGroup.GET("/:namespace", k8s_feature.GetDeploymentByNameSpace)
+		deploymentGroup.GET("/:namespace/:name", k8s_feature.GetDeploymentByName)
+
 		//================= pod
 		podGroup := kubeGroup.Group("/pod")
 		podGroup.GET("/:namespace", k8s_feature.ListPodByNamespace)
