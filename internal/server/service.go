@@ -68,11 +68,17 @@ func Start() {
 
 	// add base info
 	r.GET("/hello", HelloWord)
+	r.GET("/version", Version)
 	r.GET("/routes", Index(r.Routes()))
 	r.GET("/", Index(r.Routes()))
 
 	// run and listen
 	_ = r.Run(conf.ApplicationConfig.Port)
+}
+
+// =================================  Base Handle here
+func Version(c *gin.Context) {
+	c.String(200, conf.ApplicationConfig.Version, conf.ApplicationConfig.BuildPlatform, conf.ApplicationConfig.BuildStamp)
 }
 
 // HelloWord is the func of Get

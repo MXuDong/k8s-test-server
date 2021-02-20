@@ -6,19 +6,24 @@ import (
 )
 
 const (
-	ApplicationName = "k8s-test-server" // the application name.
+	applicationName = "k8s-test-server" // the application name.
 	version         = "0.0.1"           // the application version.
 
 	// paths
 
 	// config-file
-	DefaultConfigFile = "temp.yaml" // default config name is `k8s-test-server.yaml`, and search it in config path.
+	defaultConfigFile = "temp.yaml" // default config name is `k8s-test-server.yaml`, and search it in config path.
 
 	// envs
-	EnvPreFix = "KTS" // the environment's name, short of k8s-test-server
+	envPrefix = "KTS" // the environment's name, short of k8s-test-server
 )
 
 var ApplicationConfig = config{
+
+	CApplicationName:   applicationName,
+	CDefaultConfigFile: defaultConfigFile,
+	CEnvPrefix:         envPrefix,
+
 	// the config or command can change of config struct.
 	Port:                 ":3000",
 	Mode:                 "debug",
@@ -44,6 +49,11 @@ var ApplicationConfig = config{
 }
 
 type config struct {
+	// const value here
+	CApplicationName   string // the application name
+	CDefaultConfigFile string // the application default config file
+	CEnvPrefix         string // the env of k8s-test-server prefix
+
 	// server
 	Port    string // the application port(default should be :3000).
 	Mode    string // the application run mode(for gin, default is debug).

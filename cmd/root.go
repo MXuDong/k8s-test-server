@@ -24,9 +24,9 @@ var showVersionFlag bool
 func startCmd() *cobra.Command {
 	cobra.OnInitialize(initConf)
 	cmd := &cobra.Command{
-		Use:   conf.ApplicationName,
-		Short: conf.ApplicationName + " is test for kubernetes, but also can run everywhere",
-		Long: conf.ApplicationName + `
+		Use:   conf.ApplicationConfig.CApplicationName,
+		Short: conf.ApplicationConfig.CApplicationName + " is test for kubernetes, but also can run everywhere",
+		Long: conf.ApplicationConfig.CApplicationName + `
  is test for kubernetes, but also can run everywhere, application is packing with the docker.
 But can run in some platform by build with go build.
 The application provide http bin handler for restful request mapping, also support istio feature.
@@ -102,7 +102,7 @@ func showVersion() {
 var configPath = ""
 
 func InitCmd() *cobra.Command {
-	viper.SetEnvPrefix(conf.EnvPreFix)
+	viper.SetEnvPrefix(conf.ApplicationConfig.CEnvPrefix)
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	// init cobra
 	cmd := startCmd()
@@ -163,7 +163,7 @@ func InitCmd() *cobra.Command {
 
 func initConf() {
 	if configPath == "" {
-		viper.SetConfigFile(conf.DefaultConfigFile)
+		viper.SetConfigFile(conf.ApplicationConfig.CDefaultConfigFile)
 	} else {
 		viper.SetConfigFile(configPath)
 	}
