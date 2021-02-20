@@ -10,5 +10,8 @@
 - [ ] Add mesh support(by `Support Istio Feature`).
 
 # Temp todo list
-- [ ] add version handle
+- [x] add version handle
 - [ ] add deployment handle
+
+# Bug list
+- in kubernetes cluster, can't auto load config of kubernetes
