@@ -23,7 +23,7 @@ steps:
       GO111MODULE: on
     commands:
       - make drone-build
-      - ./app -v
+      - ./dist/app -v
 
 trigger:
   branch:
