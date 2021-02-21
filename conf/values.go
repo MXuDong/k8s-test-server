@@ -3,6 +3,7 @@ package conf
 import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"strings"
 )
 
 const (
@@ -20,10 +21,6 @@ const (
 
 var ApplicationConfig = config{
 
-	CApplicationName:   applicationName,
-	CDefaultConfigFile: defaultConfigFile,
-	CEnvPrefix:         envPrefix,
-
 	// the config or command can change of config struct.
 	Port:                 ":3000",
 	Mode:                 "debug",
@@ -33,6 +30,7 @@ var ApplicationConfig = config{
 	UseKubernetesFeature: false,
 	KubernetesConfigPath: "",
 	IsInCluster:          false,
+	EnableServerFeature:  false,
 
 	// the config or command can't change of config struct field.
 	ServiceIp:        "",
@@ -45,7 +43,13 @@ var ApplicationConfig = config{
 	BuildStamp:    "",
 
 	// program create
-	KubeClientSet: nil,
+	KubeClientSet:     nil,
+	ServiceMeshMapper: make([]serviceMeshMapper, 0),
+
+	// constant value of application
+	CApplicationName:   applicationName,
+	CDefaultConfigFile: defaultConfigFile,
+	CEnvPrefix:         envPrefix,
 }
 
 type config struct {
@@ -77,4 +81,44 @@ type config struct {
 	ServiceNamespace     string                // the pod's namespace.
 	KubeClientSet        *kubernetes.Clientset // the kubernetes client set
 	KubeClientConf       *rest.Config          // the kubernetes config
+
+	// mesh feature
+	EnableServerFeature bool                // whether to enable server feature, default should be false
+	ServiceMeshMapper   []serviceMeshMapper // the mesh mapper list, only get value from config
+}
+
+func InitMeshMapper(str string) serviceMeshMapper {
+	return serviceMeshMapper{Str: str}
+}
+
+// serviceMeshMapper package the service route info
+type serviceMeshMapper struct {
+	name *string // if name is empty, skip this value
+	host *string // host cloud be empty, it mean return value directly
+	Str  string
+}
+
+func (s *serviceMeshMapper) GetName() string {
+	if s.name == nil {
+		equalsIndex := strings.Index(s.Str, "=")
+		if equalsIndex == -1 {
+			s.name = &s.Str
+		} else {
+			tempValue := s.Str[0:equalsIndex]
+			s.name = &tempValue
+		}
+	}
+	return *s.name
+}
+
+func (s *serviceMeshMapper) GetHost() string {
+	if s.host == nil {
+		equalsIndex := strings.Index(s.Str, "=")
+		tempValue := ""
+		if equalsIndex != -1 {
+			tempValue = s.Str[equalsIndex+1:]
+		}
+		s.host = &tempValue
+	}
+	return *s.host
 }

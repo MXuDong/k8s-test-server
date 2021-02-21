@@ -48,6 +48,16 @@ All of the flags can set to ENV, and prefix is "KTS_"
 			conf.ApplicationConfig.ServiceIp = viper.GetString("env_service_ip")
 			conf.ApplicationConfig.ServiceName = viper.GetString("env_service_name")
 			conf.ApplicationConfig.ServiceNamespace = viper.GetString("env_service_namespace")
+			conf.ApplicationConfig.EnableServerFeature = viper.GetBool("mesh.enable_service_mesh")
+
+			meshList := viper.GetStringSlice("mesh.server_hosts")
+			if meshList != nil && len(meshList) != 0 {
+				for _, item := range meshList {
+					temp := conf.InitMeshMapper(item)
+					logrus.Infof("Search mesh server : name [%v] host [%v]", temp.GetName(), temp.GetHost())
+					conf.ApplicationConfig.ServiceMeshMapper = append(conf.ApplicationConfig.ServiceMeshMapper, temp)
+				}
+			}
 
 			// copy from build
 			if len(Version) != 0 {
@@ -122,6 +132,7 @@ func InitCmd() *cobra.Command {
 	}
 	cmd.PersistentFlags().BoolVar(&conf.ApplicationConfig.IsInCluster, "is_in_kubernetes", conf.ApplicationConfig.IsInCluster, "whether the application in kubernetes cluster"+
 		" as the pods")
+	cmd.PersistentFlags().BoolVar(&conf.ApplicationConfig.EnableServerFeature, "enable_service_mesh", conf.ApplicationConfig.EnableServerFeature, "whether the enable service mesh")
 
 	// set flags bind
 	_ = viper.BindPFlag("server.port", cmd.PersistentFlags().Lookup("port"))
@@ -132,6 +143,7 @@ func InitCmd() *cobra.Command {
 	_ = viper.BindPFlag("k8s.enable_kubernetes_feature", cmd.PersistentFlags().Lookup("enable_kubernetes_feature"))
 	_ = viper.BindPFlag("k8s.kubernetes_config_path", cmd.PersistentFlags().Lookup("kubernetes_config_path"))
 	_ = viper.BindPFlag("k8s.is_in_kubernetes", cmd.PersistentFlags().Lookup("is_in_kubernetes"))
+	_ = viper.BindPFlag("mesh.enable_service_mesh", cmd.PersistentFlags().Lookup("enable_service_mesh"))
 
 	// set env bind
 	_ = viper.BindEnv("server.port")
@@ -145,6 +157,7 @@ func InitCmd() *cobra.Command {
 	_ = viper.BindEnv("env_service_ip")
 	_ = viper.BindEnv("env_service_name")
 	_ = viper.BindEnv("env_service_namespace")
+	_ = viper.BindEnv("mesh.enable_service_mesh")
 
 	// init viper of application config
 	viper.SetDefault("server.port", conf.ApplicationConfig.Port)
@@ -158,6 +171,8 @@ func InitCmd() *cobra.Command {
 	viper.SetDefault("env_service_ip", "can't find in env")
 	viper.SetDefault("env_service_name", "can't find in env")
 	viper.SetDefault("env_service_namespace", "can't find in env")
+	viper.SetDefault("mesh.enable_service_mesh", conf.ApplicationConfig.EnableServerFeature)
+	viper.SetDefault("mesh.server_hosts", make([]string, 0))
 	return cmd
 }
 

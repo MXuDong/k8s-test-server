@@ -20,3 +20,8 @@ k8s:
   is_in_kubernetes: false
   # The config path of kubernetes, if not use, remove it for auto search kubernetes config file.
   kubernetes_config_path: "$home/.kube/conf"
+mesh:
+  # If is true, application will use service mesh feature.
+  enable_service_mesh: false
+  server_hosts:
+    - name=host:port/path
