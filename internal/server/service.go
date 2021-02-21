@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"k8s-test-backend/conf"
 	"k8s-test-backend/internal/server/k8s-feature"
+	mesh_feature "k8s-test-backend/internal/server/mesh-feature"
 	"k8s-test-backend/internal/server/middleware"
 )
 
@@ -50,6 +51,7 @@ func Start() {
 	// switch on kube api trans if kube feature is enable
 	kubeGroup := r.Group("/kube-feature")
 	kubeGroup.GET("/base-info", KubeBaseInfo)
+	kubeGroup.GET("/", KubeBaseInfo)
 	if conf.ApplicationConfig.UseKubernetesFeature {
 		// kube feature route here
 		// pods
@@ -69,6 +71,15 @@ func Start() {
 		podGroup := kubeGroup.Group("/pod")
 		podGroup.GET("/:namespace", k8s_feature.ListPodByNamespace)
 		podGroup.GET("/:namespace/:name", k8s_feature.GetPodByName)
+	}
+
+	// service mesh feature
+	meshGroup := r.Group("/mesh")
+	meshGroup.GET("/", mesh_feature.MeshInfo)
+	if conf.ApplicationConfig.EnableServerFeature {
+		for _, item := range conf.ApplicationConfig.ServiceMeshMapper {
+			mesh_feature.RegisterRoute(meshGroup, item.GetName(), item.GetHost())
+		}
 	}
 
 	// add base info
