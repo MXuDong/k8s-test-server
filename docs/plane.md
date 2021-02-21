@@ -4,6 +4,11 @@
 - [x] Build with harbor.
 - [x] Support kubernetes api in the pod.
 - [ ] To show all resources in kubernetes(by RESTFul client of k8s).
+    - [ ] Any resource by dynamic client 
+    - [x] Pod
+    - [x] Deployment
+    - [x] Service
+    - [x] Namespace
 - [ ] *~~Use volume.~~*
 - [ ] Support Istio feature.
 - [x] Add make file.
