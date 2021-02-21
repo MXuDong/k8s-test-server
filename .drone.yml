@@ -22,12 +22,9 @@ steps:
       GOPROXY: https://goproxy.io
       GO111MODULE: on
     commands:
+      - go test ./...
       - make drone-build
       - ./dist/app -v
-
-trigger:
-  branch:
-    - master
 
 volumes:
   - name: go-cache
