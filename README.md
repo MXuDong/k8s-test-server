@@ -7,10 +7,12 @@
 
 ## Params - 应用启动参数说明
 ```
+Flags:
       --config_path string              the application run config file path
       --enable_cache_http               whether use cache http handle, default is true (default true)
       --enable_common_http              whether use common http handle, default is true (default true)
       --enable_kubernetes_feature       whether enable kubernetes feature, default is false
+      --enable_service_mesh             whether the enable service mesh
   -h, --help                            help for k8s-test-server
       --is_in_kubernetes                whether the application in kubernetes cluster as the pods
       --kubernetes_config_path string   the config path of kubernetes (default "/Users/mengxudong/.kube/config")
@@ -18,7 +20,6 @@
       --mode string                     the application run mode, in 'debug', 'release', 'test' (default "debug")
       --port string                     the application start port, default is :3000 (default ":3000")
   -v, --version                         show the version of application
-
 ```
 
 ## 配置文件
