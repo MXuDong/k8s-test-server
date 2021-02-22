@@ -16,13 +16,31 @@ func KubeBaseInfo(ctx *gin.Context) {
 // todo dynamic model for kubernetes resource
 //func GetKubeResource(ctx *gin.Context) {
 //
+//	apiPath := ctx.Param("apiPath")
 //	version := ctx.Param("version")
 //	group := ctx.Param("group")
+//	resourceName := ctx.Param("name")
 //
-//	kubeConfig := *(Config.KubeConfig)
-//	kubeConfig.APIPath = ""
+//	kubeConfig := conf.ApplicationConfig.KubeClientConf
+//	kubeConfig.APIPath = apiPath
 //	kubeConfig.GroupVersion = &schema.GroupVersion{
-//		Group:   version,
-//		Version: group,
+//		Group:   group,
+//		Version: version,
 //	}
+//	client, err := rest.RESTClientFor(kubeConfig)
+//
+//	if err != nil {
+//		ctx.JSON(400, err)
+//		return
+//	}
+//
+//	var result runtime.Object
+//
+//	err = client.Get().Name(resourceName).Do(ctx).Into(result)
+//	if err != nil {
+//		ctx.JSON(400, err)
+//		return
+//	}
+//	ctx.JSON(200, result)
+//
 //}

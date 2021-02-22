@@ -76,6 +76,10 @@ func Start() {
 		podGroup := kubeGroup.Group("/pod")
 		podGroup.GET("/:namespace", k8s_feature.ListPodByNamespace)
 		podGroup.GET("/:namespace/:name", k8s_feature.GetPodByName)
+
+		////================= dynamic resource
+		//dynamicGroup := kubeGroup.Group("/dynamic-resource/")
+		//dynamicGroup.GET("/:apiPath/:group/:version/:name", GetKubeResource)
 	}
 
 	// service mesh feature
