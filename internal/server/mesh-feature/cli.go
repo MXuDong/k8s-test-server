@@ -9,7 +9,7 @@ import (
 
 func RegisterRoute(r *gin.RouterGroup, name, host string) {
 	r.GET("/"+name, func(context *gin.Context) {
-		// todo trans request to host, copy all request info(request params, request body and request query)
+		// todo trans request copy request info(request params, request body and request query)
 		res, err := http.Get(host)
 		if err != nil {
 			context.JSON(400, err)
