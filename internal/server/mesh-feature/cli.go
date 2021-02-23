@@ -2,13 +2,28 @@ package mesh_feature
 
 import (
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"k8s-test-backend/conf"
+	"net/http"
 )
 
 func RegisterRoute(r *gin.RouterGroup, name, host string) {
 	r.GET("/"+name, func(context *gin.Context) {
 		// todo trans request to host, copy all request info(request params, request body and request query)
-		context.JSON(200, host)
+		res, err := http.Get(host)
+		if err != nil {
+			context.JSON(400, err)
+			return
+		}
+		robots, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			context.JSON(400, err)
+			return
+		}
+		_ = res.Body.Close()
+
+		_, _ = context.Writer.Write(robots)
+		context.Writer.WriteHeader(200)
 	})
 }
 
