@@ -10,8 +10,6 @@ const (
 	applicationName = "k8s-test-server" // the application name.
 	version         = "0.0.1"           // the application version.
 
-	// paths
-
 	// config-file
 	defaultConfigFile = "temp.yaml" // default config name is `k8s-test-server.yaml`, and search it in config path.
 
@@ -31,8 +29,9 @@ var ApplicationConfig = config{
 	KubernetesConfigPath: "",
 	IsInCluster:          false,
 	EnableServerFeature:  false,
+	ApplicationRunName:   applicationName, // the application run time name, default is application name
 
-	// the config or command can't change of config struct field.
+	// the config or command can't change of config struct field. Get value from envs.
 	ServiceIp:        "",
 	ServiceName:      "",
 	ServiceNamespace: "",
@@ -59,9 +58,10 @@ type config struct {
 	CEnvPrefix         string // the env of k8s-test-server prefix
 
 	// server
-	Port    string // the application port(default should be :3000).
-	Mode    string // the application run mode(for gin, default is debug).
-	LogPath string // the log file path(default should be ./log.log).
+	Port               string // the application port(default should be :3000).
+	Mode               string // the application run mode(for gin, default is debug).
+	LogPath            string // the log file path(default should be ./log.log).
+	ApplicationRunName string // the application runtime name, use to common request's response
 
 	// common http bin
 	UseCommonHttp bool // whether to enable common http bin handle, default should be true.

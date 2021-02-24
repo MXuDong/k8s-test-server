@@ -5,7 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
+	"k8s-test-backend/conf"
 	client2 "k8s-test-backend/pkg/client"
+	"net/http"
 	"time"
 )
 
@@ -24,33 +26,33 @@ The method contain:
 //CommonGet will set now time to response body
 func CommonGet(ctx *gin.Context) {
 	logrus.Infof("Common get request %s", time.Now())
-	ctx.JSON(200, time.Now())
+	getResponse(ctx, time.Now())
 }
 
 // CommonPost will set request body to response body
 func CommonPost(ctx *gin.Context) {
 	bytes, _ := ioutil.ReadAll(ctx.Request.Body)
 	logrus.Infof("Common post %s", string(bytes))
-	ctx.String(200, string(bytes))
+	postResponse(ctx, string(bytes))
 }
 
 // CommonDelete will set 204 to response http code, delete without result
 func CommonDelete(ctx *gin.Context) {
 	bytes, _ := ioutil.ReadAll(ctx.Request.Body)
 	logrus.Infof("Common delete %s", string(bytes))
-	ctx.JSON(204, nil)
+	deleteResponse(ctx)
 }
 
 // CommonPut will set now time to response body
 func CommonPut(ctx *gin.Context) {
 	logrus.Infof("Common Put request %s", time.Now())
-	ctx.JSON(200, time.Now())
+	putResponse(ctx, time.Now())
 }
 
 // CommonPatch will set now time to response body
 func CommonPatch(ctx *gin.Context) {
 	logrus.Infof("Common Patch request %s", time.Now())
-	ctx.JSON(200, time.Now())
+	patchResponse(ctx, time.Now())
 }
 
 // ========================================================= cache about
@@ -68,12 +70,12 @@ func CachePost(ctx *gin.Context) {
 	cacheClient.Add(jsonObject)
 
 	logrus.Infof("Cache post %s", value)
-	ctx.JSON(200, value)
+	postResponse(ctx, value)
 }
 
 func CacheList(ctx *gin.Context) {
 	logrus.Infof("Cache list")
-	ctx.JSON(200, cacheClient.Values)
+	getResponse(ctx, cacheClient.Values)
 }
 
 // CacheGet will return value of target key and value from cache, the return is one object
@@ -84,19 +86,16 @@ func CacheGet(ctx *gin.Context) {
 	res := cacheClient.Find(key, value)
 
 	logrus.Infof("Cache Get : k :[%s], v :[%s], res :[%s]", key, value, res)
-	ctx.JSON(200, res)
+	getResponse(ctx, res)
 }
 
 // CacheDelete will delete target value for key and value, and set response to 204
 func CacheDelete(ctx *gin.Context) {
 	k := ctx.Param("key")
 	v := ctx.Param("value")
-
 	cacheClient.Delete(k, v)
-
 	logrus.Infof("Cache Delete : k :[%s], v :[%s]", k, v)
-
-	ctx.JSON(204, nil)
+	deleteResponse(ctx)
 }
 
 // CachePut will put the target object, and if some field not set, it will clear.
@@ -124,13 +123,13 @@ func CachePut(ctx *gin.Context) {
 	}
 	cacheClient.Add(jsonObject)
 	logrus.Infof("Cache Put : k :[%s], v :[%s], res :[%s]", k, v, jsonObject)
-	ctx.JSON(200, jsonObject)
+	putResponse(ctx, jsonObject)
 }
 
 func CacheClean(ctx *gin.Context) {
 	cacheClient.Clean()
 	logrus.Infof("Cache clean on [%s]", time.Now())
-	ctx.JSON(204, nil)
+	deleteResponse(ctx)
 }
 
 // CachePatch will update field which input set, if some field not set, will keep value.
@@ -160,7 +159,45 @@ func CachePatch(ctx *gin.Context) {
 		}
 		cacheClient.Delete(k, v)
 		cacheClient.Add(temp)
-		ctx.JSON(200, temp)
+		patchResponse(ctx, temp)
 		logrus.Infof("Cache Patch : k :[%s], v :[%s], res :[%s]", k, v, temp)
 	}
+}
+
+type commonRequestResponse struct {
+	Method          string      `json:"method"`
+	ApplicationName string      `json:"application_name"`
+	Object          interface{} `json:"object"`
+}
+
+func baseResponse(code int, ctx *gin.Context, method string, obj interface{}) {
+	ctx.Header("APP_NAME", conf.ApplicationConfig.ApplicationRunName)
+	ctx.Header("APP_VERSION", conf.ApplicationConfig.Version)
+	ctx.JSON(code, commonRequestResponse{
+		Method:          method,
+		Object:          obj,
+		ApplicationName: conf.ApplicationConfig.ApplicationRunName,
+	})
+}
+
+func getResponse(ctx *gin.Context, obj interface{}) {
+	baseResponse(200, ctx, http.MethodGet, obj)
+}
+
+func postResponse(ctx *gin.Context, obj interface{}) {
+	baseResponse(200, ctx, http.MethodPost, obj)
+}
+
+func putResponse(ctx *gin.Context, obj interface{}) {
+	baseResponse(200, ctx, http.MethodPut, obj)
+}
+
+func patchResponse(ctx *gin.Context, obj interface{}) {
+	baseResponse(200, ctx, http.MethodPatch, obj)
+}
+
+func deleteResponse(ctx *gin.Context) {
+	ctx.Header("APP_NAME", conf.ApplicationConfig.ApplicationRunName)
+	ctx.Header("APP_VERSION", conf.ApplicationConfig.Version)
+	ctx.JSON(204, nil)
 }
