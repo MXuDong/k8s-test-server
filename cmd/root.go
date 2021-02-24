@@ -10,6 +10,7 @@ import (
 	"k8s-test-backend/internal/server"
 	"k8s-test-backend/pkg/client"
 	"k8s.io/client-go/util/homedir"
+	"k8s.io/utils/env"
 	"os"
 	"path/filepath"
 	"strings"
@@ -187,7 +188,14 @@ func InitCmd() *cobra.Command {
 
 func initConf() {
 	if configPath == "" {
-		viper.SetConfigFile(conf.ApplicationConfig.CDefaultConfigFile)
+		configPath = env.GetString("KTS_CONFIG_PATH", "")
+		{
+			if configPath == "" {
+				viper.SetConfigFile(conf.ApplicationConfig.CDefaultConfigFile)
+			} else {
+				viper.SetConfigFile(configPath)
+			}
+		}
 	} else {
 		viper.SetConfigFile(configPath)
 	}

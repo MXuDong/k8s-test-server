@@ -33,6 +33,10 @@ Flags:
 
 参数优先级：控制台启动指令>环境变量>配置文件>默认启动参数
 
+
+### KTS_CONFIG_PATH
+配置文件路径
+
 ### KTS_ENV_SERVICE_IP
 应用服务地址 
 
