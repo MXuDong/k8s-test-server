@@ -6,6 +6,8 @@ server:
   mode: "debug"
   # The log file path of application, if the file not exist, it will create, else, will append log to log file.
   log_path: "log.log"
+  # The application name when program run
+  app_name: "test for kubernetes"
 # The common params.
 common:
   # If is true, will load common http handle, the request path follow RESTFul. And all the common http handle will response simple value.
@@ -24,4 +26,10 @@ mesh:
   # If is true, application will use service mesh feature.
   enable_service_mesh: false
   server_hosts:
-    - name=host:port/path
+  # format is : methods|mode|name|host
+  # please remove all the space, methods support GET POST PUT PATCH DELETE, if want more than one, use ',' split(without space)
+  # the model support : directly host-replace, directly will do request to target host, and without replace any url
+  #   host-replace will add path value to host
+  # name is the path of server route
+  # host is base request url
+#    - "|host-replace|test1|http://127.0.0.1:3000"
