@@ -54,9 +54,13 @@ All of the flags can set to ENV, and prefix is "KTS_"
 			meshList := viper.GetStringSlice("mesh.server_hosts")
 			if meshList != nil && len(meshList) != 0 {
 				for _, item := range meshList {
-					temp := conf.InitMeshMapper(item)
+					temp, err := conf.InitMeshMapper(item)
+					if err != nil {
+						logrus.Warn("Parse mesh mapper error, skip item : %s", err)
+						continue
+					}
 					logrus.Infof("Search mesh server : name [%v] host [%v]", temp.GetName(), temp.GetHost())
-					conf.ApplicationConfig.ServiceMeshMapper = append(conf.ApplicationConfig.ServiceMeshMapper, temp)
+					conf.ApplicationConfig.ServiceMeshMapper = append(conf.ApplicationConfig.ServiceMeshMapper, *temp)
 				}
 			}
 

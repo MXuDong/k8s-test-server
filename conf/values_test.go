@@ -1,66 +1,31 @@
 package conf
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
-func Test_serviceMeshMapper_GetName(t *testing.T) {
-	type fields struct {
-		name *string
-		host *string
-		Str  string
+func TestInitMeshMapper(t *testing.T) {
+	type args struct {
+		str string
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		want   string
+		name    string
+		args    args
+		want    *serviceMeshMapper
+		wantErr bool
 	}{
-		{name: "01", fields: fields{Str: ""}, want: ""},
-		{name: "02", fields: fields{Str: "test"}, want: "test"},
-		{name: "03", fields: fields{Str: "test=1"}, want: "test"},
-		{name: "04", fields: fields{Str: "="}, want: ""},
-		{name: "05", fields: fields{Str: "=="}, want: ""},
-		{name: "06", fields: fields{Str: "test=test=test"}, want: "test"},
+		{name: "1", args: args{str: "GET,POST|directly|test1|http://www.baidu.com"}, want: &serviceMeshMapper{Str: "GET,POST|directly|test1|http://www.baidu.com", methodList: []string{"GET", "POST"}, host: "http://www.baidu.com", name: "test1", mode: "directly"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := &serviceMeshMapper{
-				name: tt.fields.name,
-				host: tt.fields.host,
-				Str:  tt.fields.Str,
+			got, err := InitMeshMapper(tt.args.str)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("InitMeshMapper() error = %v, wantErr %v", err, tt.wantErr)
+				return
 			}
-			if got := s.GetName(); got != tt.want {
-				t.Errorf("GetName() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_serviceMeshMapper_GetHost(t *testing.T) {
-	type fields struct {
-		name *string
-		host *string
-		Str  string
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   string
-	}{
-		{name: "01", fields: fields{Str: ""}, want: ""},
-		{name: "02", fields: fields{Str: "test"}, want: ""},
-		{name: "03", fields: fields{Str: "test=1"}, want: "1"},
-		{name: "04", fields: fields{Str: "="}, want: ""},
-		{name: "05", fields: fields{Str: "=="}, want: "="},
-		{name: "06", fields: fields{Str: "test=test=test"}, want: "test=test"},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &serviceMeshMapper{
-				name: tt.fields.name,
-				host: tt.fields.host,
-				Str:  tt.fields.Str,
-			}
-			if got := s.GetHost(); got != tt.want {
-				t.Errorf("GetHost() = %v, want %v", got, tt.want)
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("InitMeshMapper() got = %v, want %v", got, tt.want)
 			}
 		})
 	}

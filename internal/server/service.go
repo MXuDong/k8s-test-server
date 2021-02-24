@@ -87,7 +87,7 @@ func Start() {
 	meshGroup.GET("/", mesh_feature.MeshInfo)
 	if conf.ApplicationConfig.EnableServerFeature {
 		for _, item := range conf.ApplicationConfig.ServiceMeshMapper {
-			mesh_feature.RegisterRoute(meshGroup, item.GetName(), item.GetHost())
+			mesh_feature.RegisterRoute(meshGroup, item.GetMethods(), item.GetName(), item.GetHost(), item.GetMode())
 		}
 	}
 

@@ -1,8 +1,10 @@
 package conf
 
 import (
+	"errors"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"net/http"
 	"strings"
 )
 
@@ -87,40 +89,88 @@ type config struct {
 	ServiceMeshMapper   []serviceMeshMapper // the mesh mapper list, only get value from config
 }
 
-func InitMeshMapper(str string) serviceMeshMapper {
-	return serviceMeshMapper{Str: str}
+var (
+	DefaultMethods = []string{
+		http.MethodGet,    // GET
+		http.MethodPost,   // POST
+		http.MethodDelete, // DELETE
+		http.MethodPut,    // PUT
+		http.MethodPatch,  //PATCH
+	}
+
+	MapperModeDirectly    = "directly"
+	MapperModeHostReplace = "host-replace"
+)
+
+// get,post|directly,replace:key=;value=;|test|http://127.0.0.1:3000/common/resources
+func InitMeshMapper(str string) (*serviceMeshMapper, error) {
+	valueItems := strings.Split(str, "|")
+	res := serviceMeshMapper{}
+	res.Str = str
+
+	if len(valueItems) == 4 {
+		// all mode
+		res.methodList = checkMethod(valueItems[0])
+		if len(valueItems[1]) == 0 {
+			res.mode = MapperModeDirectly
+		} else {
+			res.mode = valueItems[1]
+		}
+		res.name = valueItems[2]
+		res.host = valueItems[3]
+	} else if len(valueItems) == 2 {
+		res.name = valueItems[0]
+		res.host = valueItems[1]
+		res.methodList = DefaultMethods
+		res.mode = MapperModeDirectly
+	} else {
+		return nil, errors.New("can't parse the inout value of mesh mapper :" + str)
+	}
+
+	return &res, nil
+}
+
+func checkMethod(methods string) []string {
+	methodList := strings.Split(methods, ",")
+	if len(methods) == 0 {
+		return DefaultMethods
+	}
+	var result []string
+	flags := []bool{false, false, false, false, false} // flag for DefaultMethods
+	for _, items := range methodList {
+		for index, methodItem := range DefaultMethods {
+			if !flags[index] {
+				if items == methodItem {
+					flags[index] = true
+					result = append(result, items)
+					break
+				}
+			}
+		}
+	}
+
+	return result
 }
 
 // serviceMeshMapper package the service route info
 type serviceMeshMapper struct {
-	name *string // if name is empty, skip this value
-	host *string // host cloud be empty, it mean return value directly
-	//methodList []string
-	//model      []string
-	Str string
+	name       string // if name is empty, skip this value
+	host       string // host cloud be empty, it mean return value directly
+	methodList []string
+	mode       string
+	Str        string
 }
 
+func (s *serviceMeshMapper) GetMethods() []string {
+	return s.methodList
+}
+
+func (s *serviceMeshMapper) GetMode() string {
+	return s.mode
+}
 func (s *serviceMeshMapper) GetName() string {
-	if s.name == nil {
-		equalsIndex := strings.Index(s.Str, "=")
-		if equalsIndex == -1 {
-			s.name = &s.Str
-		} else {
-			tempValue := s.Str[0:equalsIndex]
-			s.name = &tempValue
-		}
-	}
-	return *s.name
+	return s.name
 }
-
 func (s *serviceMeshMapper) GetHost() string {
-	if s.host == nil {
-		equalsIndex := strings.Index(s.Str, "=")
-		tempValue := ""
-		if equalsIndex != -1 {
-			tempValue = s.Str[equalsIndex+1:]
-		}
-		s.host = &tempValue
-	}
-	return *s.host
+	return s.host
 }

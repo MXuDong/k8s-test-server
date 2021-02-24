@@ -3,6 +3,7 @@ package k8s_feature
 import (
 	"github.com/gin-gonic/gin"
 	"k8s-test-backend/conf"
+	client2 "k8s-test-backend/pkg/client"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -20,7 +21,7 @@ func ListPodByNamespace(ctx *gin.Context) {
 		result = append(result, item.Name)
 	}
 
-	ctx.JSON(200, result)
+	client2.BaseResponse(200, ctx, result)
 }
 
 func GetPodByName(ctx *gin.Context) {
@@ -35,5 +36,5 @@ func GetPodByName(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, res)
+	client2.BaseResponse(200, ctx, res)
 }
