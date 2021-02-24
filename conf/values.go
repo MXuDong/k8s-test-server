@@ -95,7 +95,9 @@ func InitMeshMapper(str string) serviceMeshMapper {
 type serviceMeshMapper struct {
 	name *string // if name is empty, skip this value
 	host *string // host cloud be empty, it mean return value directly
-	Str  string
+	//methodList []string
+	//model      []string
+	Str string
 }
 
 func (s *serviceMeshMapper) GetName() string {
