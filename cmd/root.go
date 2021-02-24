@@ -56,7 +56,7 @@ All of the flags can set to ENV, and prefix is "KTS_"
 				for _, item := range meshList {
 					temp, err := conf.InitMeshMapper(item)
 					if err != nil {
-						logrus.Warn("Parse mesh mapper error, skip item : %v", err)
+						logrus.Warn("Parse mesh mapper error, skip item :", err)
 						continue
 					}
 					logrus.Infof("Search mesh server : name [%v] host [%v]", temp.GetName(), temp.GetHost())
