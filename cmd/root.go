@@ -56,7 +56,7 @@ All of the flags can set to ENV, and prefix is "KTS_"
 				for _, item := range meshList {
 					temp, err := conf.InitMeshMapper(item)
 					if err != nil {
-						logrus.Warn("Parse mesh mapper error, skip item : %s", err)
+						logrus.Warn("Parse mesh mapper error, skip item : %v", err)
 						continue
 					}
 					logrus.Infof("Search mesh server : name [%v] host [%v]", temp.GetName(), temp.GetHost())
@@ -96,7 +96,7 @@ All of the flags can set to ENV, and prefix is "KTS_"
 			if conf.ApplicationConfig.UseKubernetesFeature {
 				err := client.InitClient()
 				if err != nil {
-					logrus.Warnf("Can't use kube feature: %s", err)
+					logrus.Warnf("Can't use kube feature: %v", err)
 					conf.ApplicationConfig.UseKubernetesFeature = false
 				}
 			}
@@ -194,6 +194,6 @@ func initConf() {
 
 	viper.AutomaticEnv()
 	if err := viper.ReadInConfig(); err == nil {
-		logrus.Infof("Using config file: %s", viper.ConfigFileUsed())
+		logrus.Infof("Using config file: %v", viper.ConfigFileUsed())
 	}
 }

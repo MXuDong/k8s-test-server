@@ -23,33 +23,33 @@ The method contain:
 
 //CommonGet will set now time to response body
 func CommonGet(ctx *gin.Context) {
-	logrus.Infof("Common get request %s", time.Now())
+	logrus.Infof("Common get request %v", time.Now())
 	httpClient.GetResponse(ctx, time.Now())
 }
 
 // CommonPost will set request body to response body
 func CommonPost(ctx *gin.Context) {
 	bytes, _ := ioutil.ReadAll(ctx.Request.Body)
-	logrus.Infof("Common post %s", string(bytes))
+	logrus.Infof("Common post %v", string(bytes))
 	httpClient.PostResponse(ctx, string(bytes))
 }
 
 // CommonDelete will set 204 to response http code, delete without result
 func CommonDelete(ctx *gin.Context) {
 	bytes, _ := ioutil.ReadAll(ctx.Request.Body)
-	logrus.Infof("Common delete %s", string(bytes))
+	logrus.Infof("Common delete %v", string(bytes))
 	httpClient.DeleteResponse(ctx)
 }
 
 // CommonPut will set now time to response body
 func CommonPut(ctx *gin.Context) {
-	logrus.Infof("Common Put request %s", time.Now())
+	logrus.Infof("Common Put request %v", time.Now())
 	httpClient.PutResponse(ctx, time.Now())
 }
 
 // CommonPatch will set now time to response body
 func CommonPatch(ctx *gin.Context) {
-	logrus.Infof("Common Patch request %s", time.Now())
+	logrus.Infof("Common Patch request %v", time.Now())
 	httpClient.PatchResponse(ctx, time.Now())
 }
 
@@ -67,7 +67,7 @@ func CachePost(ctx *gin.Context) {
 	}
 	cacheClient.Add(jsonObject)
 
-	logrus.Infof("Cache post %s", value)
+	logrus.Infof("Cache post %v", value)
 	httpClient.PostResponse(ctx, value)
 }
 
@@ -83,7 +83,7 @@ func CacheGet(ctx *gin.Context) {
 
 	res := cacheClient.Find(key, value)
 
-	logrus.Infof("Cache Get : k :[%s], v :[%s], res :[%s]", key, value, res)
+	logrus.Infof("Cache Get : k :[%v], v :[%v], res :[%v]", key, value, res)
 	httpClient.GetResponse(ctx, res)
 }
 
@@ -92,7 +92,7 @@ func CacheDelete(ctx *gin.Context) {
 	k := ctx.Param("key")
 	v := ctx.Param("value")
 	cacheClient.Delete(k, v)
-	logrus.Infof("Cache Delete : k :[%s], v :[%s]", k, v)
+	logrus.Infof("Cache Delete : k :[%v], v :[%v]", k, v)
 	httpClient.DeleteResponse(ctx)
 }
 
@@ -120,13 +120,13 @@ func CachePut(ctx *gin.Context) {
 		ctx.JSON(500, err)
 	}
 	cacheClient.Add(jsonObject)
-	logrus.Infof("Cache Put : k :[%s], v :[%s], res :[%s]", k, v, jsonObject)
+	logrus.Infof("Cache Put : k :[%v], v :[%v], res :[%v]", k, v, jsonObject)
 	httpClient.PutResponse(ctx, jsonObject)
 }
 
 func CacheClean(ctx *gin.Context) {
 	cacheClient.Clean()
-	logrus.Infof("Cache clean on [%s]", time.Now())
+	logrus.Infof("Cache clean on [%v]", time.Now())
 	httpClient.DeleteResponse(ctx)
 }
 
@@ -158,6 +158,6 @@ func CachePatch(ctx *gin.Context) {
 		cacheClient.Delete(k, v)
 		cacheClient.Add(temp)
 		httpClient.PatchResponse(ctx, temp)
-		logrus.Infof("Cache Patch : k :[%s], v :[%s], res :[%s]", k, v, temp)
+		logrus.Infof("Cache Patch : k :[%v], v :[%v], res :[%v]", k, v, temp)
 	}
 }

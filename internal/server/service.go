@@ -103,7 +103,7 @@ func Start() {
 
 // =================================  Base Handle here
 func Version(c *gin.Context) {
-	c.String(200, "version:%s, platform:%s, buildStamp:%s", conf.ApplicationConfig.Version, conf.ApplicationConfig.BuildPlatform, conf.ApplicationConfig.BuildStamp)
+	c.String(200, "version:%v, platform:%v, buildStamp:%v", conf.ApplicationConfig.Version, conf.ApplicationConfig.BuildPlatform, conf.ApplicationConfig.BuildStamp)
 }
 
 // HelloWord is the func of Get

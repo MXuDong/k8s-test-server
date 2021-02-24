@@ -31,5 +31,5 @@ func LogHandler(ctx *gin.Context) {
 	clientIP := ctx.ClientIP()
 
 	// 日志格式
-	logrus.Infof("[GIN]-| %3d | %13v | %15s | %s | %s |", statusCode, latencyTime, clientIP, reqMethod, reqUri)
+	logrus.Infof("[GIN]-| %3d | %13v | %15s | %v | %v |", statusCode, latencyTime, clientIP, reqMethod, reqUri)
 }
