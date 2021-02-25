@@ -62,9 +62,9 @@ func innerProcess(request *http.Request, ctx *gin.Context) {
 		return
 	}
 
-	resHeader, resBody, err := ParseResponse(response)
+	resHeader, resBody, bodyStr, err := ParseResponse(response)
 	if err != nil {
-		ctx.JSON(400, err)
+		client.BaseResponse(200, ctx, bodyStr)
 		return
 	}
 	client.BaseResponse(200, ctx, client.HeaderResponse{
@@ -74,14 +74,14 @@ func innerProcess(request *http.Request, ctx *gin.Context) {
 }
 
 // get response from target value
-func ParseResponse(response *http.Response) (map[string][]string, map[string]interface{}, error) {
+func ParseResponse(response *http.Response) (map[string][]string, map[string]interface{}, string, error) {
 	var responseJsonBody map[string]interface{}
 	readRes, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, string(readRes), err
 	}
 	err = json.Unmarshal(readRes, &responseJsonBody)
-	return response.Header, responseJsonBody, err
+	return response.Header, responseJsonBody, string(readRes), err
 }
 
 // copy the request form ctx
