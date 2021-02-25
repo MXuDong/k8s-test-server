@@ -12,7 +12,7 @@
 - [ ] *~~Use volume.~~*
 - [ ] Support Istio feature.
 - [x] Add make file.
-- [ ] Add mesh support(by `Support Istio Feature`).
+- [x] Add mesh support(by `Support Istio Feature`).
 
 # Temp todo list
 - [x] add version handle
