@@ -118,7 +118,7 @@ volumes:
 # The drone config
 kind: pipeline
 type: docker
-name: build images
+name: for dev test
 
 steps:
   # build the application to ./dist/app
