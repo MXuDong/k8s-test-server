@@ -34,6 +34,9 @@ volumes:
     host:
       path: /daocloud/drone/cache/docker-cache
 
+trigger:
+  branch:
+    - master
 ---
 # For docker runner to build docker image
 
@@ -101,6 +104,58 @@ steps:
 trigger:
   branch:
     - master
+
+volumes:
+  - name: go-cache
+    host:
+      path: /daocloud/drone/cache/go-cache
+  - name: docker-cache
+    host:
+      path: /daocloud/drone/cache/docker-cache
+  - name: dockersock
+    host:
+      path: /var/run/docker.sock
+---
+# For test image
+
+# The drone config
+kind: pipeline
+type: docker
+name: for dev test
+
+steps:
+  # build the application to ./dist/app
+  - name: build app
+    image: golang:1.15
+    volumes:
+      - name: go-cache
+        path: /go/pkg
+    environment:
+      GOCACHE: /go/pkg/.cache/go-build/edge-backend
+      GOPROXY: https://goproxy.io
+      GO111MODULE: on
+    commands:
+      - make drone-build
+
+  # for daocloud harbor
+  - name: for harbor - dao cloud
+    image: plugins/docker
+    pull: if-not-exists
+    volumes:
+      - name: docker-cache
+        path: /var/lib/docker
+      - name: dockersock
+        path: /var/run/docker.sock
+    settings:
+      username:
+        from_secret: daocloud_harbor_name
+      password:
+        from_secret: daocloud_harbor_secret
+      dockerfile: Dockerfile.drone
+      repo: harbor.daocloud.cn/xudong.meng/common-test
+      registry: harbor.daocloud.cn
+      tags:
+        drone-test-${DRONE_BUILD_NUMBER}
 
 volumes:
   - name: go-cache

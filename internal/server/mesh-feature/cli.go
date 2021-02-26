@@ -3,6 +3,7 @@ package mesh_feature
 import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"k8s-test-backend/conf"
 	"k8s-test-backend/pkg/client"
@@ -28,8 +29,10 @@ func RegisterRoute(r *gin.RouterGroup, methods []string, name, host, mode string
 }
 
 func ProxyModeSwitch(name, host, mode string) (string, func(ctx *gin.Context)) {
+
 	if mode == conf.MapperModeDirectly {
 		return "/" + name, func(ctx *gin.Context) {
+			logrus.Infof("Proxy method %s, to %s", ctx.Request.Method, host)
 			request, err := CopyRequest(ctx, host)
 			if err != nil {
 				ctx.JSON(400, err)
@@ -39,6 +42,7 @@ func ProxyModeSwitch(name, host, mode string) (string, func(ctx *gin.Context)) {
 		}
 	} else if mode == conf.MapperModeHostReplace {
 		return "/" + name + "/*path", func(ctx *gin.Context) {
+			logrus.Infof("Proxy method %s, to %s", ctx.Request.Method, host)
 			paths := ctx.Param("path")
 			request, err := CopyRequest(ctx, host+paths)
 			if err != nil {
