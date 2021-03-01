@@ -29,32 +29,36 @@ func RegisterRoute(r *gin.RouterGroup, methods []string, name, host, mode string
 }
 
 func ProxyModeSwitch(name, host, mode string) (string, func(ctx *gin.Context)) {
-
+	path := host
 	if mode == conf.MapperModeDirectly {
-		return "/" + name, func(ctx *gin.Context) {
-			logrus.Infof("Proxy method %s, to %s", ctx.Request.Method, host)
-			request, err := CopyRequest(ctx, host)
-			if err != nil {
-				ctx.JSON(400, err)
-				return
-			}
-			innerProcess(request, ctx)
-		}
+		path = "/" + name
 	} else if mode == conf.MapperModeHostReplace {
-		return "/" + name + "/*path", func(ctx *gin.Context) {
-			logrus.Infof("Proxy method %s, to %s", ctx.Request.Method, host)
-			paths := ctx.Param("path")
-			request, err := CopyRequest(ctx, host+paths)
-			if err != nil {
-				ctx.JSON(400, err)
-				return
-			}
-			innerProcess(request, ctx)
-		}
+		path = "/" + name + "/*path"
 	}
-	// all others will do nothing, but receive the request
-	return "/" + name, func(ctx *gin.Context) {
+
+	if path == host {
+		return path, emptyFunction()
+	}
+
+	return path, generatorHandle(host)
+}
+
+func emptyFunction() func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
 		ctx.JSON(204, nil)
+	}
+}
+
+func generatorHandle(host string) func(ctx *gin.Context) {
+	return func(ctx *gin.Context) {
+		logrus.Infof("Proxy method %s, to %s", ctx.Request.Method, host)
+		paths := ctx.Param("path")
+		request, err := CopyRequest(ctx, host+paths)
+		if err != nil {
+			ctx.JSON(400, err)
+			return
+		}
+		innerProcess(request, ctx)
 	}
 }
 
