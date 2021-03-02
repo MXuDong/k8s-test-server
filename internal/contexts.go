@@ -21,3 +21,7 @@ func CommonSuccessList(ctx *gin.Context, value []interface{}) {
 		Items: value,
 	})
 }
+
+func CommonSuccess(ctx *gin.Context, value interface{}) {
+	ctx.JSON(200, value)
+}
