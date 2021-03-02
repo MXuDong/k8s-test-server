@@ -13,3 +13,16 @@ func SleepHandle(sleepTime func() time.Duration) func(*gin.Context) {
 		ctx.JSON(204, nil)
 	}
 }
+
+func ErrorHandler(errorGenerator func() (code int, err error, msg string)) func(*gin.Context) {
+	code, err, msg := errorGenerator()
+	return func(ctx *gin.Context) {
+		ctx.JSON(code, struct {
+			Error error  `json:"error"`
+			Msg   string `json:"msg"`
+		}{
+			Error: err,
+			Msg:   msg,
+		})
+	}
+}
