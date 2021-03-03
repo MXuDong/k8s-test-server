@@ -1,11 +1,13 @@
 package server
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"k8s-test-backend/conf"
 	"k8s-test-backend/internal/server/k8s-feature"
 	mesh_feature "k8s-test-backend/internal/server/mesh-feature"
 	"k8s-test-backend/internal/server/middleware"
+	"k8s-test-backend/pkg/common"
 )
 
 var OK = 200
@@ -103,12 +105,16 @@ func Start() {
 
 // =================================  Base Handle here
 func Version(c *gin.Context) {
-	c.String(200, "version:%v, platform:%v, buildStamp:%v", conf.ApplicationConfig.Version, conf.ApplicationConfig.BuildPlatform, conf.ApplicationConfig.BuildStamp)
+	common.SuccessString(c,
+		fmt.Sprintf("version:%v, platform:%v, buildStamp:%v",
+			conf.ApplicationConfig.Version,
+			conf.ApplicationConfig.BuildPlatform,
+			conf.ApplicationConfig.BuildStamp))
 }
 
 // HelloWord is the func of Get
 func HelloWord(c *gin.Context) {
-	c.String(200, "hello world")
+	common.SuccessString(c, "hello world")
 }
 
 // Index will return routes
@@ -127,6 +133,6 @@ func Index(info []gin.RouteInfo) func(ctx *gin.Context) {
 		})
 	}
 	return func(ctx *gin.Context) {
-		ctx.JSON(200, res)
+		common.Success(ctx, res)
 	}
 }

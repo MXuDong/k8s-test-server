@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"k8s-test-backend/conf"
+	"k8s-test-backend/pkg/common"
 	"os"
 )
 
@@ -24,7 +25,7 @@ func PodEnv(c *gin.Context) {
 			ServiceNamespace: conf.ApplicationConfig.ServiceNamespace,
 		}
 	}
-	c.JSON(OK, podEnvInfoInstance)
+	common.Success(c, podEnvInfoInstance)
 }
 
 type StringArrayResult struct {
@@ -37,10 +38,10 @@ func GetEnvInfo(c *gin.Context) {
 	res := &StringArrayResult{
 		Paths: envs,
 	}
-	c.JSON(OK, res)
+	common.Success(c, res)
 }
 
 // GetEnv will return target env value, if not exits, it will return empty value
 func GetEnv(c *gin.Context) {
-	c.String(OK, os.Getenv(c.Param("env")))
+	common.SuccessString(c, os.Getenv(c.Param("env")))
 }

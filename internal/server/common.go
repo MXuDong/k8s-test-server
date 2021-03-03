@@ -6,6 +6,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	httpClient "k8s-test-backend/pkg/client"
+	"k8s-test-backend/pkg/common"
 	"time"
 )
 
@@ -137,12 +138,12 @@ func CachePatch(ctx *gin.Context) {
 
 	value, _ := ioutil.ReadAll(ctx.Request.Body)
 	if len(value) == 0 {
-		ctx.String(400, "Update not find")
+		common.CodeString(ctx, 400, "Update not find")
 		return
 	}
 
 	if temp := cacheClient.Find(k, v); temp == nil {
-		ctx.String(400, "Target value can't found.")
+		common.CodeString(ctx, 400, "Target value can't found.")
 		return
 	} else {
 		// do update

@@ -3,6 +3,7 @@ package client
 import (
 	"github.com/gin-gonic/gin"
 	"k8s-test-backend/conf"
+	"k8s-test-backend/pkg/common"
 )
 
 type CommonRequestResponse struct {
@@ -27,23 +28,23 @@ func BaseResponse(code int, ctx *gin.Context, obj interface{}) {
 }
 
 func GetResponse(ctx *gin.Context, obj interface{}) {
-	BaseResponse(200, ctx, obj)
+	common.Success(ctx, obj)
 }
 
 func PostResponse(ctx *gin.Context, obj interface{}) {
-	BaseResponse(200, ctx, obj)
+	common.Success(ctx, obj)
 }
 
 func PutResponse(ctx *gin.Context, obj interface{}) {
-	BaseResponse(200, ctx, obj)
+	common.Success(ctx, obj)
 }
 
 func PatchResponse(ctx *gin.Context, obj interface{}) {
-	BaseResponse(200, ctx, obj)
+	common.Success(ctx, obj)
 }
 
 func DeleteResponse(ctx *gin.Context) {
 	ctx.Header("APP_NAME", conf.ApplicationConfig.ApplicationRunName)
 	ctx.Header("APP_VERSION", conf.ApplicationConfig.Version)
-	ctx.JSON(204, nil)
+	common.SuccessEmpty(ctx)
 }

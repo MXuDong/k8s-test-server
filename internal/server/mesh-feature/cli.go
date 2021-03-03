@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"k8s-test-backend/conf"
 	"k8s-test-backend/pkg/client"
+	"k8s-test-backend/pkg/common"
 	"net/http"
 	"strings"
 )
@@ -35,7 +36,7 @@ func ProxyModeSwitch(name, host, mode string) (string, func(ctx *gin.Context)) {
 			logrus.Infof("Proxy method %s, to %s", ctx.Request.Method, host)
 			request, err := CopyRequest(ctx, host)
 			if err != nil {
-				ctx.JSON(400, err)
+				common.Error(400, ctx, err)
 				return
 			}
 			innerProcess(request, ctx)
