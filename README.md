@@ -1,3 +1,5 @@
+# 该仓库即将关闭，已经重新构造：Example.repo
+
 # k8s测试服务-后端
 
 ![kts](./docs/kts.png)
